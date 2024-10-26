@@ -21,7 +21,7 @@ class APIService < ApplicationRecord
   scope :ordered, -> { order(:name) }
 
   def ai_backend
-    gemini? ? AIBackend::Gemini : (openai? ? AIBackend::OpenAI : AIBackend::Anthropic)
+    self.url == APIService::URL_GEMINI ? AIBackend::Gemini : (openai? ? AIBackend::OpenAI : AIBackend::Anthropic)
   end
 
   def requires_token?
