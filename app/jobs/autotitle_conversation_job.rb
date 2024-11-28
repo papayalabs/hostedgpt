@@ -31,7 +31,7 @@ class AutotitleConversationJob < ApplicationJob
         response_format: { type: "json_object" }  # this causes problems for Groq even though it's supported: https://console.groq.com/docs/api-reference#chat-create
       )
       return JSON.parse(response)["topic"]
-    elsif ai_backend.class == AIBackend::Gemini
+    elsif ai_backend.class == AIBackend::Google
       response = ai_backend.get_oneoff_message(
         system_message,
         [text],

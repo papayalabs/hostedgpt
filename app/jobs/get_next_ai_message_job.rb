@@ -176,7 +176,7 @@ class GetNextAIMessageJob < ApplicationJob
       "https://platform.openai.com/account/billing/overview"
     when "Anthropic"
       "https://console.anthropic.com/settings/plans"
-    when "Gemini"
+    when "Google"
       "https://aistudio.google.com/app/apikey"
     else
       "https://platform.openai.com/account/billing/overview"

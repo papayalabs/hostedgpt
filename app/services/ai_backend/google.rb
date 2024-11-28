@@ -1,11 +1,11 @@
-class AIBackend::Gemini < AIBackend
+class AIBackend::Google < AIBackend
   include Tools
   class ::Gemini::Errors::ConfigurationError < ::Gemini::Errors::GeminiError; end
 
   # Rails system tests don't seem to allow mocking because the server and the
   # test are in separate processes.
   #
-  # In regular tests, mock this method or the TestClients::Gemini class to do
+  # In regular tests, mock this method or the TestClients::Google class to do
   # what you want instead.
   def self.client
     if Rails.env.test?
@@ -19,7 +19,7 @@ class AIBackend::Gemini < AIBackend
     super(user, assistant, conversation, message)
     begin
       raise configuration_error if assistant.api_service.requires_token? && assistant.api_service.effective_token.blank?
-      Rails.logger.info "Connecting to Gemini API server at #{assistant.api_service.url} with access token of length #{assistant.api_service.effective_token.to_s.length}"
+      Rails.logger.info "Connecting to Google API server at #{assistant.api_service.url} with access token of length #{assistant.api_service.effective_token.to_s.length}"
       @client = self.class.client.new(credentials: {service: "generative-language-api",
                                                     api_key: assistant.api_service.effective_token,
                                                     version: "v1beta"},
