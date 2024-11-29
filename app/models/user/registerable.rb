@@ -11,7 +11,7 @@ module User::Registerable
     api_services.create!(url: APIService::URL_OPEN_AI, driver: :openai, name: "OpenAI")
     api_services.create!(url: APIService::URL_ANTHROPIC, driver: :anthropic, name: "Anthropic")
     api_services.create!(url: APIService::URL_GROQ, driver: :openai, name: "Groq")
-    api_services.create!(url: APIService::URL_GOOGLE, driver: :google, name: "Google Google")
+    api_services.create!(url: APIService::URL_GOOGLE, driver: :google, name: "Google Gemini")
 
     LanguageModel.import_from_file(users: [self])
     Assistant.import_from_file(users: [self])
