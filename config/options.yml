@@ -77,3 +77,8 @@ shared:
     smtp_password: <%= ENV["SMTP_PASSWORD"] || default_to(:smtp_password) %>
     smtp_authentication: <%= ENV["SMTP_AUTHENTICATION"] || default_to(:smtp_authentication) || "plain" %>
     smtp_enable_starttls_auto: <%= ENV["SMTP_ENABLE_STARTTLS_AUTO"] || default_to(:smtp_enable_starttls_auto) || true %>
+    api_publica_cifra_url: <%= ENV["API_PUBLICA_CIFRA_URL"] || default_to(:api_publica_cifra_url) %>
+    api_publica_cifra_api_key: <%= ENV["API_PUBLICA_CIFRA_API_KEY"] || default_to(:api_publica_cifra_api_key) %>
+    api_publica_cifra_secret_key: <%= ENV["API_PUBLICA_CIFRA_SECRET_KEY"] || default_to(:api_publica_cifra_secret_key) %>
+    api_publica_cifra_user: <%= ENV["API_PUBLICA_CIFRA_USER"] || default_to(:api_publica_cifra_user) %>
+    api_publica_cifra_password: <%= ENV["API_PUBLICA_CIFRA_PASSWORD"] || default_to(:api_publica_cifra_password) %>

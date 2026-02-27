@@ -9,6 +9,7 @@ class Toolbox < SDK
       Toolbox::Image,
       Toolbox::Memory,
       Toolbox::GoogleSearch,
+      Toolbox::APIPublicaCifra,
       gmail_active && Toolbox::Gmail,
       tasks_active && Toolbox::GoogleTasks,
     ].compact
