@@ -39,7 +39,7 @@ class Toolbox::APIPublicaCifra < Toolbox
       fecha_recibo_from: fecha_from_s,
       fecha_recibo_to: fecha_to_s
     }.compact
-    cobros = get(url("/api_publica/v1/gestion_economica/cobros")).header(cabeceras_auth).param(params)
+    cobros = get(url("/api_publica/v1/gestion_economica/cobros"),token_vigente).param(params)
     {
       total: cobros.size,
       cobros: cobros,
@@ -54,7 +54,7 @@ class Toolbox::APIPublicaCifra < Toolbox
   S
 
   def obtener_formas_pago
-    formas_pago = get(url("/api_publica/v1/gestion_economica/formas_pago")).header(cabeceras_auth).param({})
+    formas_pago = get(url("/api_publica/v1/gestion_economica/formas_pago"),token_vigente).param({})
     {
       total: formas_pago.size,
       formas_pago: formas_pago,
@@ -68,7 +68,7 @@ class Toolbox::APIPublicaCifra < Toolbox
   S
 
   def obtener_modalidades
-    modalidades = get(url("/api_publica/v1/gestion_economica/modalidades")).header(cabeceras_auth).param({})
+    modalidades = get(url("/api_publica/v1/gestion_economica/modalidades"),token_vigente).param({})
     {
       total: modalidades.size,
       modalidades: modalidades,
@@ -119,7 +119,7 @@ class Toolbox::APIPublicaCifra < Toolbox
   S
 
   def obtener_annos_lectivos
-    annos = get(url("/api_publica/v1/annos_lectivos")).header(cabeceras_auth).param({})
+    annos = get(url("/api_publica/v1/annos_lectivos"),token_vigente).param({})
     {
       total: annos.size,
       annos_lectivos: annos,
@@ -153,7 +153,7 @@ class Toolbox::APIPublicaCifra < Toolbox
   S
 
   def obtener_incidencias
-    incidencias = get(url("/api_publica/v1/incidencias")).header(cabeceras_auth).param({})
+    incidencias = get(url("/api_publica/v1/incidencias"),token_vigente).param({})
     {
       total: incidencias.size,
       incidencias: incidencias,
@@ -170,7 +170,7 @@ class Toolbox::APIPublicaCifra < Toolbox
   S
 
   def obtener_rutas_transporte
-    rutas = get(url("/api_publica/v1/transporte/rutas")).header(cabeceras_auth).param({})
+    rutas = get(url("/api_publica/v1/transporte/rutas"),token_vigente).param({})
     {
       total: rutas.size,
       rutas: rutas,
@@ -186,7 +186,7 @@ class Toolbox::APIPublicaCifra < Toolbox
 
   def obtener_paradas_transporte(turno_id_i: nil)
     params = { turno_id: turno_id_i }.compact
-    paradas = get(url("/api_publica/v1/transporte/paradas")).header(cabeceras_auth).param(params)
+    paradas = get(url("/api_publica/v1/transporte/paradas"),token_vigente).param(params)
     {
       total: paradas.size,
       paradas: paradas,
@@ -204,7 +204,7 @@ class Toolbox::APIPublicaCifra < Toolbox
   S
 
   def obtener_servicios
-    servicios = get(url("/api_publica/v1/servicios/servicios")).header(cabeceras_auth).param({})
+    servicios = get(url("/api_publica/v1/servicios/servicios"),token_vigente).param({})
     {
       total: servicios.size,
       servicios: servicios,
