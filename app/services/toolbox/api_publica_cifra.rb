@@ -22,6 +22,20 @@ class Toolbox::APIPublicaCifra < Toolbox
   # Gestión económica - Cobros
   # ---------------------------------------------------------------------------
 
+  describe :obtener_empresas, <<~S
+    Obtiene el listado de empresas del centro educativo asociadas a la gestión económica.
+    Devuelve un máximo de 1000 registros por petición.
+  S
+
+  def obtener_empresas
+    empresas = get(url("/api_publica/v1/gestion_economica/empresas"),token_vigente).param({})
+    {
+      total: empresas.size,
+      empresas: empresas,
+      message_to_user: "Se obtuvieron #{empresas.size} empresas"
+    }
+  end
+
   describe :obtener_cobros, <<~S
     Obtiene el listado de cobros/recibos de gestión económica del centro.
     Devuelve un máximo de 1000 registros por petición.
