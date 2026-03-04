@@ -1,0 +1,296 @@
+es:
+  app:
+    navigation:
+      profile_fallback: "Perfil"
+      settings: "Configuración"
+      logout: "Cerrar sesión"
+    settings:
+      title: "Configuración"
+      home: "Inicio"
+      close: "Cerrar"
+      api_services:
+        index_title: "Servicios de API"
+        none: "No tienes servicios de API configurados."
+        add_new: "Añadir nuevo"
+        menu:
+          index: "Servicios de API"
+        table:
+          name: "Nombre"
+          url: "URL"
+          driver: "Controlador"
+        new_title: "Nuevo servicio de API"
+        back: "Volver"
+        editing_title: "Editando %{name}"
+        delete: "Eliminar"
+        confirm_delete: "¿Estás seguro?"
+        save: "Guardar"
+        saving: "Guardando..."
+        test: "Probar"
+        instructions_button: "¿Cómo lo obtengo?"
+        errors_title:
+          one: "%{count} error impidió guardar este servicio de API:"
+          other: "%{count} errores impidieron guardar este servicio de API:"
+      assistants:
+        new_title: "Nuevo asistente"
+        edit_title: "Configurar asistente"
+        delete: "Eliminar"
+        confirm_delete: "¿Estás seguro?"
+        cancel: "Cancelar"
+        menu:
+          new: "Nuevo asistente"
+        form:
+          name: "Nombre"
+          slug: "Slug"
+          language_model: "Modelo de lenguaje"
+          description: "Descripción"
+          instructions: "Instrucciones personalizadas"
+          save: "Guardar"
+          saving: "Guardando..."
+          errors_title:
+            one: "%{count} error impidió guardar este asistente:"
+            other: "%{count} errores impidieron guardar este asistente:"
+      language_models:
+        index_title: "Modelos de lenguaje"
+        menu:
+          index: "Modelos de lenguaje"
+        add_new: "Añadir nuevo"
+        new_title: "Nuevo modelo de lenguaje"
+        editing_title: "Editando %{name}"
+        delete: "Eliminar"
+        confirm_delete: "¿Estás seguro?"
+        back: "Volver"
+        table:
+          name: "Nombre de API"
+          description: "Descripción"
+          api_service: "Servicio de API"
+          supports_pdf: "Admite PDFs"
+        form:
+          name: "Nombre para mostrar"
+          api_name: "Nombre de API"
+          api_name_hint: "Tal como se especifica en la documentación de la API"
+          api_service: "Servicio de API"
+          supports_images: "¿Admite imágenes?"
+          supports_tools: "¿Admite herramientas (llamada a funciones)?"
+          supports_system_message: "¿Admite mensaje del sistema (instrucciones)?"
+          supports_pdf: "¿Admite PDFs?"
+          test: "Probar"
+          save: "Guardar"
+          saving: "Guardando..."
+          errors_title:
+            one: "%{count} error impidió guardar este modelo de lenguaje:"
+            other: "%{count} errores impidieron guardar este modelo de lenguaje:"
+      memories:
+        title: "Memorias del asistente"
+        menu:
+          title: "Memorias del asistente"
+        description: "Estas son las cosas recordadas de todas las conversaciones pasadas. Todos los asistentes comparten esta memoria."
+        none: "Sin memorias"
+        clear_all: "Borrar todas las memorias"
+        confirm_clear: "¿Estás seguro?"
+        table:
+          memory: "Memoria"
+        forget: "Olvidar"
+      people:
+        menu:
+          account: "Tu cuenta"
+        form:
+          errors_title:
+            one: "%{count} error impidió guardar esta persona:"
+            other: "%{count} errores impidieron guardar esta persona:"
+          email: "Correo electrónico"
+          first_name: "Nombre"
+          last_name: "Apellido"
+          password: "Contraseña"
+          color_theme: "Tema de color"
+          theme_options:
+            dark: "Oscuro"
+            light: "Claro"
+            system: "Sistema"
+          enable_tools: "Habilitar herramientas para asistentes"
+          gmail_section: "Gmail:"
+          gmail_trouble: "¿Problemas? Intenta"
+          deleting_connection: "Eliminando conexión"
+          enabled: "Habilitado"
+          enable_gmail: "Habilitar Gmail"
+          google_tasks_section: "Google Tasks:"
+          enable_google_tasks: "Habilitar Google Tasks"
+          save: "Guardar"
+          saving: "Guardando..."
+          cancel: "Cancelar"
+          oauth_confirm: "Cuando veas las casillas de permisos, necesitas seleccionar Todos para que esta función funcione. ¿Entendido?"
+        buttons:
+          gmail: "Gmail"
+          google_tasks: "Google Tasks"
+      generic:
+        yes: "Sí"
+        no: "No"
+    chat:
+      empty_state:
+        greeting: "¿En qué puedo ayudarte hoy?"
+    auth:
+      welcome_back: "Bienvenido de nuevo"
+      no_account: "¿No tienes una cuenta?"
+      sign_up: "Regístrate"
+      login_with_google: "Iniciar sesión con Google"
+      login_with_microsoft: "Iniciar sesión con Microsoft"
+      or: "- O -"
+      email_address: "Correo electrónico"
+      password: "Contraseña"
+      login: "Iniciar sesión"
+      authenticating: "Autenticando..."
+      forgot_password: "¿Olvidaste tu contraseña?"
+    documents:
+      index_title: "Documentos"
+      new: "Nuevo documento"
+      new_title: "Nuevo documento"
+      editing_title: "Editando documento"
+      show_title: "Ver este documento"
+      back_to: "Volver a documentos"
+      edit: "Editar este documento"
+      destroy: "Eliminar este documento"
+      fields:
+        user: "Usuario"
+        assistant: "Asistente"
+        message: "Mensaje"
+        filename: "Nombre de archivo"
+        purpose: "Propósito"
+        bytes: "Bytes"
+    conversations:
+      editing_title: "Editando conversación"
+      show_title: "Ver esta conversación"
+      new_chat: "Nueva conversación"
+      options: "Opciones"
+      rename: "Renombrar"
+      delete: "Eliminar"
+      cost_summary:
+        conversation_approx: "Conversación ~"
+        input: "Entrada"
+        output: "Salida"
+        tokens: "Tokens"
+        cost: "Coste"
+      shortcuts:
+        header: "Atajos de teclado"
+        open_new: "Abrir nueva conversación"
+        focus_input: "Enfocar entrada de chat"
+        unfocus_input: "Desenfocar entrada de chat"
+        toggle_microphone: "Alternar modo de micrófono"
+        stop_streaming: "Detener respuesta en streaming"
+        copy_last: "Copiar última respuesta (o código)"
+        toggle_sidebar: "Alternar barra lateral"
+        show_shortcuts: "Mostrar atajos"
+        inside_input_header: "Dentro de la entrada de chat"
+      ui:
+        close_sidebar: "Cerrar barra lateral"
+        open_sidebar: "Abrir barra lateral"
+        menu: "Menú"
+        attach: "Adjuntar"
+        remove_file: "Eliminar archivo"
+        stop: "Detener"
+        voice_mode: "Modo de voz"
+        send_message: "Enviar mensaje"
+        search_placeholder: "Buscar"
+      starters:
+        - title: "Sugiere un plan de comidas saludable"
+          description: "para una semana para alguien con una agenda ocupada"
+        - title: "Planifica un itinerario de viaje en solitario"
+          description: "para un fin de semana en una región montañosa"
+        - title: "Redacta una breve biografía de Matz"
+          description: "centrada en su filosofía detrás de la creación de Ruby"
+        - title: "Inicia sesión"
+          description: "en la API pública de Cifra"
+    flashes:
+      auth:
+        invalid_login: "Correo electrónico o contraseña no válidos"
+        registration_disabled: "El registro está deshabilitado"
+        cancelled: "Cancelado"
+        error_prefix: "Error. %{message}"
+      password_resets:
+        email_sent: "Si ese correo electrónico es válido, acabamos de enviar un correo para restablecer la contraseña."
+        token_expired: "Tu token ha expirado. Por favor, inténtalo de nuevo."
+        reset_success: "Tu contraseña fue restablecida correctamente."
+        reset_error: "Hubo un error al restablecer tu contraseña"
+      conversations:
+        deleted: "Conversación eliminada"
+      language_models:
+        saved: "Guardado"
+        tested: "Probado: %{answer}"
+        deleted: "Eliminado"
+        not_found: "No se pudo encontrar el modelo de lenguaje"
+      assistants:
+        saved: "Guardado"
+        deleted: "Eliminado"
+        deleted_full: "El asistente fue eliminado"
+        last_delete_error: "No se puede eliminar tu último asistente"
+      api_services:
+        saved: "Guardado"
+        tested: "Probado: %{answer}"
+        deleted: "Eliminado"
+        not_found: "No se pudo encontrar el servicio de API"
+      memories:
+        forgotten: "Olvidado"
+        cleared: "Memoria borrada"
+      documents:
+        created: "El documento fue creado correctamente."
+        updated: "El documento fue actualizado correctamente."
+        destroyed: "El documento fue eliminado correctamente."
+    share:
+      title: "Compartir esta conversación"
+      description: "Comparte un enlace de acceso público a esta conversación. Cualquier persona con el enlace podrá ver la conversación."
+      url: "URL para compartir"
+      copy: "Copiar"
+      copied: "¡Copiado al portapapeles!"
+      warning: "Cualquier persona con este enlace puede ver esta conversación. Ten cuidado de no compartir información sensible."
+      close: "Cerrar"
+    helpers:
+      messages:
+        from_user: "Tú"
+        stopped: "Detenido"
+        copy_code: "Copiar código"
+        copied: "¡Copiado!"
+      application:
+        not_available: "No disponible"
+  models:
+      document:
+        errors:
+          file:
+            attached: "debe estar adjunto"
+      assistant:
+        errors:
+          slug:
+            taken: "ya está en uso"
+  activerecord:
+    errors:
+      models:
+        assistant:
+          attributes:
+            slug:
+              taken: "ya está en uso"
+      person:
+        errors:
+          personable_id:
+            unchanged: "no se puede cambiar después de la creación"
+            provided_on_update: "debe proporcionarse en la actualización"
+      conversation:
+        group:
+          today: "Hoy"
+          yesterday: "Ayer"
+          this_week: "Esta semana"
+          this_month: "Este mes"
+          last_month: "El mes pasado"
+          older: "Más antiguo"
+      message:
+        errors:
+          index:
+            invalid: "no es válido"
+            skip: "no puede omitir un número"
+          branched:
+            false_follow: "es falso pero el índice no sigue un mensaje existente"
+            required_with_from: "debe establecerse cuando se especifica branched_from_version"
+          branched_from_version:
+            required_when_branched: "debe establecerse cuando branched es verdadero"
+          version:
+            invalid_argument: "for_conversation_version(version) acepta una versión numérica o :latest"
+            latest_scope_missing: "latest_version_for_conversation debe usarse en los mensajes de una conversación"
+            invalid_for_index: "%{version} no es válido para este índice"
+            exists_for_index: "%{version} ya existe para este índice"
+            set_without_index: "no se puede establecer sin establecer también el índice"
