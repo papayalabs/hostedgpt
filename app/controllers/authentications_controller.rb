@@ -1,6 +1,5 @@
 class AuthenticationsController < ApplicationController
   require_unauthenticated_access only: [:new, :create]
-  before_action :ensure_manual_login_allowed, except: :destroy
 
   layout "public"
 
@@ -8,11 +7,10 @@ class AuthenticationsController < ApplicationController
   end
 
   def create
-    person = Person.find_by(email: params[:email])
-    user = person&.personable
+    user = User.find_by(email: params[:email].to_s.downcase.strip)
 
-    if person.present? && user&.password_credential&.authenticate(params[:password])
-      login_as(person, credential: user.password_credential)
+    if user&.authenticate(params[:password])
+      login_as(user)
       redirect_to root_path
       return
     end

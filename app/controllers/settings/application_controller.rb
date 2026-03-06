@@ -8,8 +8,8 @@ class Settings::ApplicationController < ApplicationController
   def set_settings_menu
     # controller_name => array of items
     @settings_menu = {
-      people: {
-  I18n.t("app.settings.people.menu.account") => edit_settings_person_path,
+      users: {
+        I18n.t("app.settings.people.menu.account") => edit_settings_user_path,
       },
 
       memories: {

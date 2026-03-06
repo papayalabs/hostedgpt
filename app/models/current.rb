@@ -1,5 +1,4 @@
 class Current < ActiveSupport::CurrentAttributes
-  attribute :person
   attribute :user
   attribute :client
 
@@ -7,16 +6,11 @@ class Current < ActiveSupport::CurrentAttributes
 
   def self.initialize_with(client: nil)
     self.client = client
-
-    if client&.authenticated?
-      self.person = client.person
-      self.user = client.person&.user
-    end
-
+    self.user = client.user if client&.authenticated?
     self.user
   end
 
   def self.reset
-    self.person = self.user = self.client = nil
+    self.user = self.client = nil
   end
 end

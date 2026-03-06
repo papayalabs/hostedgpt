@@ -1,10 +1,8 @@
 class Client < ApplicationRecord
-  belongs_to :person
+  belongs_to :user
 
-  has_one :authentication, -> { not_deleted }
-  has_many :authentications_including_deleted, class_name: "Authentication", inverse_of: :client, dependent: :destroy
-  scope :authenticated, -> { joins(:authentication).merge(Authentication.not_deleted) }
-
+  scope :not_deleted, -> { where(deleted_at: nil) }
+  scope :authenticated, -> { not_deleted }
   enum :platform, %w[ ios android web api ].index_by(&:to_sym)
 
   has_secure_token
@@ -12,21 +10,11 @@ class Client < ApplicationRecord
   scope :ordered, -> { order(updated_at: :asc) }
 
   def authenticated?
-    authentication.present? && authentication.persisted?
-  end
-
-  def authenticate_with!(credential)
-    if authentication
-      authentication&.deleted!
-      reload_authentication
-    end
-    create_authentication! credential: credential
+    deleted_at.nil?
   end
 
   def logout!
-    return false unless authenticated?
-    authentication.deleted!
-    reload_authentication
+    update!(deleted_at: Time.current)
     true
   end
 

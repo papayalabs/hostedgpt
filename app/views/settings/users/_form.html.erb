@@ -1,0 +1,65 @@
+<%= form_with(model: user, url: settings_user_path, method: :patch, class: "contents") do |form| %>
+  <% if user.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <h2><%= t('app.settings.people.form.errors_title', count: user.errors.count) %></h2>
+      <ul>
+        <% user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :email, t('app.settings.people.form.email') %>
+    <%= form.text_field :email, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full dark:text-black" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :first_name, t('app.settings.people.form.first_name') %>
+    <%= form.text_field :first_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full dark:text-black" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :last_name, t('app.settings.people.form.last_name') %>
+    <%= form.text_field :last_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full dark:text-black" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :password, t('app.settings.people.form.password') %>
+    <%= form.password_field :password,
+      placeholder: "Leave blank to keep current password",
+      class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full dark:text-black"
+    %>
+  </div>
+
+  <div class="my-5" data-controller="transition" data-transition-toggle-class="hidden">
+    <%= form.label :dark_mode, t('app.settings.people.form.color_theme') %>
+    <div class="flex items-center justify-between outline-none pl-3 py-2 mt-2 w-full dark:text-black gap-1">
+      <%= form.fields_for :preferences do |preferences_fields| %>
+        <% %w(dark light system).each do |value| %>
+          <div class="flex items-center gap-2">
+            <%= preferences_fields.radio_button :dark_mode, value, checked: Current.user.preferences[:dark_mode] == value %>
+            <%= form.label :dark_mode, t("app.settings.people.form.theme_options.#{value}"),
+              class: "dark:text-gray-100",
+              for: "user_preferences_dark_mode_#{value}" %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="inline">
+    <%= form.submit t('app.settings.people.form.save'),
+      class: %|
+        inline-block font-bold
+        bg-gray-200 dark:bg-gray-900
+        border border-gray-400
+        rounded-lg py-3 px-5
+        cursor-pointer
+      |,
+      data: { turbo_submits_with: t('app.settings.people.form.saving') }
+    %>
+    <%= link_to t('app.settings.people.form.cancel'), root_path, class: "float-right inline-block ml-5 py-3" %>
+  </div>
+<% end %>
