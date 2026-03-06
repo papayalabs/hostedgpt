@@ -8,14 +8,6 @@ module User::Registerable
   private
 
   def create_initial_assistants_etc
-    api_services.create!(url: APIService::URL_OPEN_AI, driver: :openai, name: "OpenAI")
-    api_services.create!(url: APIService::URL_ANTHROPIC, driver: :anthropic, name: "Anthropic")
-    api_services.create!(url: APIService::URL_GROQ, driver: :openai, name: "Groq")
-    api_services.create!(url: APIService::URL_GEMINI, driver: :gemini, name: "Google Gemini")
-    api_services.create!(url: "http://ai.artavita.com/v1/", driver: :openai, name: "Artavita")
-    api_services.create!(url: "http://127.0.0.1:11434/v1/", driver: :openai, name: "Ollama")
-
-    LanguageModel.import_from_file(users: [self])
     Assistant.import_from_file(users: [self])
   end
 end

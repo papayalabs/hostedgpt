@@ -21,7 +21,7 @@ class Authenticate::ByBearerTokenTest < ActionDispatch::IntegrationTest
   end
 
   test "POST request that redirects should auth user and return a special JSON response for redirect" do
-    params = assistants(:samantha).slice(:name, :description, :instructions, :language_model_id)
+    params = assistants(:samantha).slice(:name, :description, :instructions, :provider_name, :driver, :url, :api_name)
 
     post settings_assistants_url, headers: bearer_token_for(clients(:keith_api)), params: { assistant: params }.to_json
     assert_response :success

@@ -2,10 +2,32 @@
 assistants:
 - name: GPT-4o
   slug: gpt-4o
-  language_model_api_name: gpt-4o
+  provider_name: OpenAI
+  driver: openai
+  url: https://api.openai.com/v1/
+  api_name: gpt-4o
+  supports_images: true
+  supports_tools: true
+  supports_system_message: true
+  supports_pdf: false
 - name: Claude 4.5 Sonnet
   slug: claude-sonnet
-  language_model_api_name: claude-sonnet-4-5-20250929
+  provider_name: Anthropic
+  driver: anthropic
+  url: https://api.anthropic.com/
+  api_name: claude-sonnet-4-5-20250929
+  supports_images: true
+  supports_tools: true
+  supports_system_message: true
+  supports_pdf: false
 - name: Meta Llama
   slug: llama-3-70b
-  language_model_api_name: llama3.1
+  provider_name: Artavita
+  driver: openai
+  url: http://ai.artavita.com/v1/
+  api_name: llama3.1
+  supports_images: false
+  supports_tools: false
+  supports_system_message: true
+  supports_pdf: false
+

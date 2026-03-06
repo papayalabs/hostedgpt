@@ -76,7 +76,7 @@ class ConversationTest < ActiveSupport::TestCase
   end
 
   test "the title of a conversation is automatically set when the second message is created by the job" do
-    assistants(:samantha).language_model.update!(supports_tools: false)
+    assistants(:samantha).update!(supports_tools: false)
 
     perform_enqueued_jobs do
       TestClient::OpenAI.stub :text, "{\"topic\":\"Hear me\"}" do

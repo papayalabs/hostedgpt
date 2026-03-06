@@ -2,6 +2,11 @@ class Assistant < ApplicationRecord
   include Export
   include Slug
 
+  URL_OPEN_AI   = "https://api.openai.com/v1/"
+  URL_ANTHROPIC = "https://api.anthropic.com/"
+  URL_GROQ      = "https://api.groq.com/openai/v1/"
+  URL_GEMINI    = "https://generativelanguage.googleapis.com/v1beta/"
+
   MAX_LIST_DISPLAY = 5
 
   belongs_to :user
@@ -12,18 +17,53 @@ class Assistant < ApplicationRecord
   has_many :steps, dependent: :destroy
   has_many :messages, dependent: :destroy
 
-  delegate :supports_images?, to: :language_model
-  delegate :supports_pdf?, to: :language_model
-  delegate :api_service, to: :language_model
-
-  belongs_to :language_model
+  enum :driver, %w[openai anthropic gemini].index_by(&:to_sym)
 
   validates :tools, presence: true, allow_blank: true
-  validates :name, presence: true
+  validates :name, :api_name, :driver, :url, :provider_name, presence: true
+
+  normalizes :url, with: -> url { url.strip }
+  encrypts :token
 
   scope :ordered, -> { order(:id) }
+  scope :for_user, ->(user) { where(user_id: user.id).not_deleted }
 
-  delegate :api_name, to: :language_model, prefix: true, allow_nil: true
+  def ai_backend
+    case driver
+    when "openai"    then AIBackend::OpenAI
+    when "anthropic" then AIBackend::Anthropic
+    when "gemini"    then AIBackend::Gemini
+    end
+  end
+
+  def requires_token?
+    [URL_OPEN_AI, URL_ANTHROPIC, URL_GEMINI].include?(url)
+  end
+
+  def effective_token
+    token.presence || default_llm_key
+  end
+
+  def supports_images?
+    supports_images
+  end
+
+  def supports_pdf?
+    supports_pdf
+  end
+
+  def supports_tools?
+    supports_tools &&
+      provider_name != "Groq" # TODO: Remove once Groq tool use is debugged
+  end
+
+  def supports_system_message?
+    supports_system_message
+  end
+
+  def test_api_service(url = nil, token = nil)
+    ai_backend.test_api_service(self, url, token)
+  end
 
   def initials
     return nil if name.blank?
@@ -38,7 +78,12 @@ class Assistant < ApplicationRecord
     name
   end
 
-  def language_model_api_name=(api_name)
-    self.language_model = LanguageModel.for_user(user).find_by(api_name:)
+  private
+
+  def default_llm_key
+    return nil unless Feature.default_llm_keys?
+    return Setting.default_openai_key   if url == URL_OPEN_AI
+    return Setting.default_anthropic_key if url == URL_ANTHROPIC
+    return Setting.default_groq_key     if url == URL_GROQ
   end
 end

@@ -40,9 +40,14 @@
   <% end %>
 
   <div class="my-5">
-  <%= form.label :language_model_id, t('app.settings.assistants.form.language_model') %><br/>
-    <%= form.select :language_model_id,
-      @models,
+  <%= form.label :provider_name, t('app.settings.assistants.form.provider_name') %>
+    <%= form.text_field :provider_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full dark:text-black" %>
+  </div>
+
+  <div class="my-5">
+  <%= form.label :driver, t('app.settings.assistants.form.driver') %>
+    <%= form.select :driver,
+      Assistant.drivers.keys.map { |d| [d.capitalize, d] },
       {},
       class: %|
         block
@@ -52,6 +57,36 @@
         w-full
         dark:text-black
     | %>
+  </div>
+
+  <div class="my-5">
+  <%= form.label :url, t('app.settings.assistants.form.url') %>
+    <%= form.text_field :url, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full dark:text-black" %>
+  </div>
+
+  <div class="my-5">
+  <%= form.label :token, t('app.settings.assistants.form.token') %>
+    <%= form.password_field :token, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full dark:text-black" %>
+  </div>
+
+  <div class="my-5">
+  <%= form.label :api_name, t('app.settings.assistants.form.api_name') %>
+    <%= form.text_field :api_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full dark:text-black" %>
+  </div>
+
+  <div class="my-5 flex gap-4">
+    <label class="flex items-center gap-2">
+      <%= form.check_box :supports_images %> <%= t('app.settings.assistants.form.supports_images') %>
+    </label>
+    <label class="flex items-center gap-2">
+      <%= form.check_box :supports_tools %> <%= t('app.settings.assistants.form.supports_tools') %>
+    </label>
+    <label class="flex items-center gap-2">
+      <%= form.check_box :supports_system_message %> <%= t('app.settings.assistants.form.supports_system_message') %>
+    </label>
+    <label class="flex items-center gap-2">
+      <%= form.check_box :supports_pdf %> <%= t('app.settings.assistants.form.supports_pdf') %>
+    </label>
   </div>
 
   <div class="my-5">

@@ -13,7 +13,7 @@ class Settings::AssistantsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create assistant" do
-    params = assistants(:samantha).slice(:name, :description, :instructions, :language_model_id)
+    params = assistants(:samantha).slice(:name, :description, :instructions, :provider_name, :driver, :url, :api_name)
 
     assert_difference("Assistant.count") do
       post settings_assistants_url, params: { assistant: params }
@@ -21,7 +21,7 @@ class Settings::AssistantsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to edit_settings_assistant_url(Assistant.last)
     assert_nil flash[:error]
-    assert_equal params, Assistant.last.slice(:name, :description, :instructions, :language_model_id)
+    assert_equal params, Assistant.last.slice(:name, :description, :instructions, :provider_name, :driver, :url, :api_name)
   end
 
   test "should show error when creating assistant with duplicate slug" do
@@ -31,7 +31,10 @@ class Settings::AssistantsControllerTest < ActionDispatch::IntegrationTest
       slug: existing_assistant.slug,
       description: "A new description",
       instructions: "New instructions",
-      language_model_id: language_models(:gpt_4o).id
+      provider_name: "OpenAI",
+      driver: "openai",
+      url: Assistant::URL_OPEN_AI,
+      api_name: "gpt-4o"
     }
 
     assert_no_difference("Assistant.count") do
@@ -65,16 +68,16 @@ class Settings::AssistantsControllerTest < ActionDispatch::IntegrationTest
     assert_contains_text "main", "Delete"
   end
 
-  test "should allow language_model selection" do
+  test "should allow provider/model field editing" do
     get edit_settings_assistant_url(@assistant)
-    assert_select "label", "Language model"
-    assert_select "select#assistant_language_model_id"
+    assert_select "label", "Provider name"
+    assert_select "input#assistant_api_name"
   end
 
-  test "should update language_model" do
-    params = {language_model_id: language_models(:claude_best).id}
+  test "should update api_name" do
+    params = { api_name: "gpt-4o-mini" }
     patch settings_assistant_url(@assistant), params: { assistant: params }
-    assert_equal language_models(:claude_best), @assistant.reload.language_model
+    assert_equal "gpt-4o-mini", @assistant.reload.api_name
   end
 
   test "should update assistant" do

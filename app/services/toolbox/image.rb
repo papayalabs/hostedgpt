@@ -36,15 +36,15 @@ class Toolbox::Image < Toolbox
   end
 
   def openai_client
-    openai_service = Current.user.api_services.find_by(driver: :openai)
+    openai_assistant = Current.user.assistants.find_by(driver: :openai)
 
-    if openai_service.nil? || openai_service.effective_token.blank?
-      current_backend = Current.message&.assistant&.language_model&.api_service&.name || "current AI backend"
-      raise "OpenAI API key not found. Image generation requires an OpenAI API key. Please configure your OpenAI API key in Settings > API Services to use image generation with #{current_backend}."
+    if openai_assistant.nil? || openai_assistant.effective_token.blank?
+      current_backend = Current.message&.assistant&.provider_name || "current AI backend"
+      raise "OpenAI API key not found. Image generation requires an OpenAI API key. Please configure your OpenAI API key in Settings > Assistants to use image generation with #{current_backend}."
     end
 
     OpenAI::Client.new(
-      access_token: openai_service.effective_token
+      access_token: openai_assistant.effective_token
     )
   end
 end

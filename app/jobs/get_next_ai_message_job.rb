@@ -11,7 +11,7 @@ class GetNextAIMessageJob < ApplicationJob
   retry_on WaitForPrevious, wait: ->(run) { (2**run - 1).seconds }, attempts: 3
 
   def ai_backend
-    @assistant.language_model.ai_backend
+    @assistant.ai_backend
   end
 
   def perform(user_id, message_id, assistant_id, attempt = 1)
@@ -65,7 +65,7 @@ class GetNextAIMessageJob < ApplicationJob
     wrap_up_the_message
     return true
   rescue OpenAI::ConfigurationError => e
-    name = @assistant.language_model.api_service.name
+    name = @assistant.provider_name
     if name == "OpenAI"
       set_openai_error
     elsif name == "Groq"

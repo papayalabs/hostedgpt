@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_20_230241) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_06_000021) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -48,33 +48,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_230241) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "api_services", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "name", null: false
-    t.string "driver", null: false, comment: "What API spec does this service conform to, e.g. OpenAI or Anthropic"
-    t.string "url", null: false
-    t.string "token"
-    t.datetime "deleted_at", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id", "deleted_at"], name: "index_api_services_on_user_id_and_deleted_at"
-    t.index ["user_id"], name: "index_api_services_on_user_id"
-  end
-
   create_table "assistants", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "name"
     t.string "description"
     t.string "instructions"
     t.jsonb "tools", default: [], null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "language_model_id"
     t.datetime "deleted_at", precision: nil
     t.text "external_id", comment: "The Backend AI's (e.g OpenAI) assistant id"
     t.string "slug"
+    t.string "provider_name", null: false
+    t.string "driver", null: false, comment: "What API spec does this service conform to, e.g. OpenAI or Anthropic"
+    t.string "url", null: false
+    t.string "token"
+    t.string "api_name", null: false, comment: "This is the name that API calls are expecting."
+    t.boolean "supports_images", default: false, null: false
+    t.boolean "supports_tools", default: false
+    t.boolean "supports_system_message", default: false
+    t.boolean "supports_pdf", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["external_id"], name: "index_assistants_on_external_id", unique: true
-    t.index ["language_model_id"], name: "index_assistants_on_language_model_id"
     t.index ["user_id", "deleted_at"], name: "index_assistants_on_user_id_and_deleted_at"
     t.index ["user_id", "slug"], name: "index_assistants_on_user_id_and_slug", unique: true, where: "(slug IS NOT NULL)"
     t.index ["user_id"], name: "index_assistants_on_user_id"
@@ -114,13 +108,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_230241) do
     t.bigint "user_id", null: false
     t.bigint "assistant_id", null: false
     t.string "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "last_assistant_message_id"
     t.text "external_id", comment: "The Backend AI system (e.g OpenAI) Thread Id"
     t.integer "input_token_total_count", default: 0, null: false
     t.integer "output_token_total_count", default: 0, null: false
     t.string "share_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["assistant_id"], name: "index_conversations_on_assistant_id"
     t.index ["external_id"], name: "index_conversations_on_external_id", unique: true
     t.index ["last_assistant_message_id"], name: "index_conversations_on_last_assistant_message_id"
@@ -161,24 +155,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_230241) do
     t.index ["user_id"], name: "index_documents_on_user_id"
   end
 
-  create_table "language_models", force: :cascade do |t|
-    t.integer "position", null: false
-    t.string "api_name", null: false, comment: "This is the name that API calls are expecting."
-    t.string "name", null: false
-    t.boolean "supports_images", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "deleted_at", precision: nil
-    t.bigint "user_id", null: false
-    t.bigint "api_service_id"
-    t.boolean "supports_tools", default: false
-    t.boolean "supports_system_message", default: false
-    t.boolean "supports_pdf", default: false, null: false
-    t.index ["api_service_id"], name: "index_language_models_on_api_service_id"
-    t.index ["user_id", "deleted_at"], name: "index_language_models_on_user_id_and_deleted_at"
-    t.index ["user_id"], name: "index_language_models_on_user_id"
-  end
-
   create_table "memories", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "message_id"
@@ -193,8 +169,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_230241) do
     t.bigint "conversation_id", null: false
     t.string "role", null: false
     t.string "content_text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "content_document_id"
     t.bigint "run_id"
     t.bigint "assistant_id", null: false
@@ -210,6 +184,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_230241) do
     t.integer "output_token_count", default: 0, null: false
     t.decimal "input_token_cost", precision: 30, scale: 15, default: "0.0", null: false
     t.decimal "output_token_cost", precision: 30, scale: 15, default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["assistant_id"], name: "index_messages_on_assistant_id"
     t.index ["content_document_id"], name: "index_messages_on_content_document_id"
     t.index ["conversation_id", "index", "version"], name: "index_messages_on_conversation_id_and_index_and_version", unique: true
@@ -264,9 +240,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_230241) do
     t.string "additional_instructions"
     t.jsonb "tools", default: [], null: false
     t.jsonb "file_ids", default: [], null: false
+    t.text "external_id", comment: "The Backend AI system (e.g OpenAI) Run Id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "external_id", comment: "The Backend AI system (e.g OpenAI) Run Id"
     t.index ["assistant_id"], name: "index_runs_on_assistant_id"
     t.index ["conversation_id"], name: "index_runs_on_conversation_id"
   end
@@ -329,8 +305,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_230241) do
     t.integer "pid", null: false
     t.string "hostname"
     t.text "metadata"
-    t.datetime "created_at", null: false
     t.string "name", null: false
+    t.datetime "created_at", null: false
     t.index ["last_heartbeat_at"], name: "index_solid_queue_processes_on_last_heartbeat_at"
     t.index ["name", "supervisor_id"], name: "index_solid_queue_processes_on_name_and_supervisor_id", unique: true
     t.index ["supervisor_id"], name: "index_solid_queue_processes_on_supervisor_id"
@@ -404,9 +380,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_230241) do
     t.datetime "cancelled_at", precision: nil
     t.datetime "failed_at", precision: nil
     t.datetime "completed_at", precision: nil
+    t.text "external_id", comment: "The Backend AI system (e.g OpenAI) Step Id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "external_id", comment: "The Backend AI system (e.g OpenAI) Step Id"
     t.index ["assistant_id"], name: "index_steps_on_assistant_id"
     t.index ["conversation_id"], name: "index_steps_on_conversation_id"
     t.index ["run_id"], name: "index_steps_on_run_id"
@@ -427,8 +403,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_230241) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "api_services", "users"
-  add_foreign_key "assistants", "language_models"
   add_foreign_key "assistants", "users"
   add_foreign_key "authentications", "clients"
   add_foreign_key "authentications", "credentials"
@@ -441,8 +415,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_230241) do
   add_foreign_key "documents", "assistants"
   add_foreign_key "documents", "messages"
   add_foreign_key "documents", "users"
-  add_foreign_key "language_models", "api_services"
-  add_foreign_key "language_models", "users"
   add_foreign_key "memories", "messages"
   add_foreign_key "memories", "users"
   add_foreign_key "messages", "assistants"

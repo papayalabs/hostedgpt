@@ -5,7 +5,7 @@ class GetNextAIMessageJobOpenaiTest < ActiveJob::TestCase
     @conversation = conversations(:greeting)
     @user = @conversation.user
     @assistant = @conversation.assistant
-    @assistant.language_model.update!(supports_tools: false)
+    @assistant.update!(supports_tools: false)
     @conversation.messages.create! role: :user, content_text: "Are you still there?", assistant: @assistant
     @message = @conversation.latest_message_for_version(:latest)
     @test_client = TestClient::OpenAI.new(access_token: "abc")

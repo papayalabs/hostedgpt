@@ -11,18 +11,18 @@ class Assistant::SlugTest < ActiveSupport::TestCase
     keith_gpt4.save!
     assert_equal "openai-gpt-4o", keith_gpt4.slug
 
-    lm = language_models(:gpt_best)
+    lm_attrs = assistants(:keith_best).slice(:provider_name, :driver, :url, :api_name, :supports_images, :supports_tools, :supports_system_message, :supports_pdf)
     user = users(:keith)
-    same_name1 = user.assistants.create!(language_model: lm, name: "Best OpenAI Model")
+    same_name1 = user.assistants.create!(**lm_attrs, name: "Best OpenAI Model")
     assert_equal "best-openai-model", same_name1.slug
-    same_name2 = user.assistants.create!(language_model: lm, name: "Best OpenAI Model")
+    same_name2 = user.assistants.create!(**lm_attrs, name: "Best OpenAI Model")
     assert_equal "best-openai-model--1", same_name2.slug
-    same_name3 = user.assistants.create!(language_model: lm, name: "Best OpenAI Model")
+    same_name3 = user.assistants.create!(**lm_attrs, name: "Best OpenAI Model")
     assert_equal "best-openai-model--2", same_name3.slug
 
-    similar_name = user.assistants.create!(language_model: lm, name: "Best OpenAI Model 2")
+    similar_name = user.assistants.create!(**lm_attrs, name: "Best OpenAI Model 2")
     assert_equal "best-openai-model-2", similar_name.slug
-    similar_name2 = user.assistants.create!(language_model: lm, name: "Best OpenAI Model 2")
+    similar_name2 = user.assistants.create!(**lm_attrs, name: "Best OpenAI Model 2")
     assert_equal "best-openai-model-2--1", similar_name2.slug
   end
 
@@ -51,7 +51,14 @@ class Assistant::SlugTest < ActiveSupport::TestCase
     new_assistant = assistant.user.assistants.create!(
       name: assistant.name,
       slug: original_slug,
-      language_model: assistant.language_model,
+      provider_name: assistant.provider_name,
+      driver: assistant.driver,
+      url: assistant.url,
+      api_name: assistant.api_name,
+      supports_images: assistant.supports_images,
+      supports_tools: assistant.supports_tools,
+      supports_system_message: assistant.supports_system_message,
+      supports_pdf: assistant.supports_pdf,
       tools: assistant.tools
     )
     assert_equal original_slug, new_assistant.slug
@@ -83,7 +90,10 @@ class Assistant::SlugTest < ActiveSupport::TestCase
     new_assistant = existing.user.assistants.new(
       name: "Different Name",
       slug: existing.slug,
-      language_model: existing.language_model
+      provider_name: existing.provider_name,
+      driver: existing.driver,
+      url: existing.url,
+      api_name: existing.api_name
     )
     assert_not new_assistant.valid?
     assert_includes new_assistant.errors[:slug], "has already been taken"

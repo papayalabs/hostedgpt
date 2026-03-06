@@ -6,20 +6,17 @@ module Assistant::Export
     slug
     description
     instructions
-    language_model_api_name
+    provider_name
+    driver
+    url
+    api_name
+    supports_images
+    supports_tools
+    supports_system_message
+    supports_pdf
   ]
 
   DEFAULT_ASSISTANT_FILE = "assistants.yml"
-
-  def attributes
-    super.merge("language_model_api_name" => language_model_api_name)
-  end
-
-  # Unsure why this needs to re-defined, but the original ActiveModel::Serialization
-  # implementation is ignoring the #attributes method above.
-  def attribute_names_for_serialization
-    attributes.keys
-  end
 
   class_methods do
     def export_to_file(path: Rails.root.join(DEFAULT_ASSISTANT_FILE), assistants:, only: DEFAULT_EXPORT_ONLY)
@@ -45,6 +42,8 @@ module Assistant::Export
           asst = user.assistants.find_or_create_by(slug: assistant["slug"])
           asst.assign_attributes(assistant.except("slug")) if asst.deleted_at.nil?
           asst.save!
+        rescue ActiveRecord::RecordInvalid => e
+          warn "Failed to import '#{assistant[:name]}': #{e.message} for #{assistant.inspect}"
         end
       end
     end

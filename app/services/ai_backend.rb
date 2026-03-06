@@ -48,25 +48,23 @@ class AIBackend
     end
   end
 
-  def self.test_language_model(language_model, api_name = nil)
-    api_name ||= language_model.api_name
-    url = language_model.api_service.url
-    token = language_model.api_service.effective_token
-    return "Error: API key (token) is blank" if language_model.api_service.requires_token? && token.blank?
+  def self.test_language_model(assistant, api_name = nil)
+    api_name ||= assistant.api_name
+    url = assistant.url
+    token = assistant.effective_token
+    return "Error: API key (token) is blank" if assistant.requires_token? && token.blank?
 
     test_execute(url, token, api_name)
   end
 
-  def self.test_api_service(api_service, url = nil, token = nil)
-    url ||= api_service.url
-    token ||= api_service.effective_token
-    language_model = api_service.language_models.first
-    api_name = language_model.api_name unless language_model.nil?
+  def self.test_api_service(assistant, url = nil, token = nil)
+    url   ||= assistant.url
+    token ||= assistant.effective_token
 
-    return "Error: API key (token) is blank" if api_service.requires_token? && token.blank?
-    return "Error: API name is blank. Define a Language Model for this API service." if api_name.blank?
+    return "Error: API key (token) is blank" if assistant.requires_token? && token.blank?
+    return "Error: API name is blank. Define an api_name for this assistant." if assistant.api_name.blank?
 
-    test_execute(url, token, api_name)
+    test_execute(url, token, assistant.api_name)
   end
 
   private

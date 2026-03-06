@@ -21,14 +21,6 @@ class Settings::ApplicationController < ApplicationController
       }.to_h.merge({
   I18n.t("app.settings.assistants.menu.new") => new_settings_assistant_path
       }),
-
-      language_models: {
-  I18n.t("app.settings.language_models.menu.index") => settings_language_models_path,
-      },
-
-      api_services: {
-  I18n.t("app.settings.api_services.menu.index") => settings_api_services_path,
-      },
     }
   end
 end

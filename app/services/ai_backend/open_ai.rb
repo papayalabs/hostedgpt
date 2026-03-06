@@ -40,9 +40,9 @@ class AIBackend::OpenAI < AIBackend
   def initialize(user, assistant, conversation = nil, message = nil)
     super(user, assistant, conversation, message)
     begin
-      raise ::OpenAI::ConfigurationError if assistant.api_service.requires_token? && assistant.api_service.effective_token.blank?
-      Rails.logger.info "Connecting to OpenAI API server at #{assistant.api_service.url} with access token of length #{assistant.api_service.effective_token.to_s.length}"
-      @client = self.class.client.new(uri_base: assistant.api_service.url, access_token: assistant.api_service.effective_token, api_version: "")
+      raise ::OpenAI::ConfigurationError if assistant.requires_token? && assistant.effective_token.blank?
+      Rails.logger.info "Connecting to OpenAI API server at #{assistant.url} with access token of length #{assistant.effective_token.to_s.length}"
+      @client = self.class.client.new(uri_base: assistant.url, access_token: assistant.effective_token, api_version: "")
     rescue ::Faraday::UnauthorizedError
       raise ::OpenAI::ConfigurationError
     end
@@ -63,13 +63,13 @@ class AIBackend::OpenAI < AIBackend
 
     @client_config = {
       parameters: {
-        model: @assistant.language_model.api_name,
+        model: @assistant.api_name,
         messages: system_message(config[:instructions]) + config[:messages],
         stream: config[:streaming] && @response_handler || nil,
         max_completion_tokens: 2000, # we should really set this dynamically, based on the model, to the max
         stream_options: config[:streaming] && { include_usage: true } || nil,
         response_format: { type: "text" },
-        tools: @assistant.language_model.supports_tools? && Toolbox.tools || nil,
+        tools: @assistant.supports_tools? && Toolbox.tools || nil,
       }.compact.merge(config[:params] || {})
     }
   end

@@ -7,7 +7,7 @@ class AutotitleConversationJob < ApplicationJob
 
   def perform(conversation_id)
     @conversation = Conversation.find(conversation_id)
-    return false if @conversation.assistant.api_service.requires_token? && @conversation.assistant.api_service.effective_token.blank?
+    return false if @conversation.assistant.requires_token? && @conversation.assistant.effective_token.blank?
 
     messages = @conversation.messages.ordered.limit(4)
     raise ConversationNotReady  if messages.empty?
@@ -22,7 +22,7 @@ class AutotitleConversationJob < ApplicationJob
 
   def generate_title_for(text)
 
-    ai_backend = @conversation.assistant.api_service.ai_backend.new(@conversation.user, @conversation.assistant)
+    ai_backend = @conversation.assistant.ai_backend.new(@conversation.user, @conversation.assistant)
 
     if ai_backend.class == AIBackend::OpenAI || ai_backend.class == AIBackend::Anthropic
       params = ai_backend.class == AIBackend::OpenAI ? { response_format: { type: "json_object" } } : {}
@@ -71,7 +71,7 @@ class AutotitleConversationJob < ApplicationJob
       ```
     END
 
-    if @conversation.assistant.api_service.driver == "anthropic"
+    if @conversation.assistant.driver == "anthropic"
       base_message + "\n\nIMPORTANT: You must respond with ONLY valid JSON. Do not include any explanatory text, markdown formatting, or other content. Your entire response should be exactly: {\"topic\": \"Your 2-4 word summary here\"}"
     else
       base_message

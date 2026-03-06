@@ -5,10 +5,6 @@ class UserTest < ActiveSupport::TestCase
     assert_instance_of Person, users(:keith).person
   end
 
-  test "has associated language_models" do
-    assert_instance_of LanguageModel, users(:keith).language_models.first
-  end
-
   test "has associated credentials" do
     assert_instance_of PasswordCredential, users(:keith).credentials.type_is("PasswordCredential").first
   end
@@ -56,15 +52,11 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "associations are deleted upon destroy" do
-    assert_difference "APIService.count", -users(:keith).api_services_including_deleted.count do
-      assert_difference "LanguageModel.count", -users(:keith).language_models_including_deleted.count do
-        assert_difference "Assistant.count", -users(:keith).assistants_including_deleted.count do
-          assert_difference "Conversation.count", -users(:keith).conversations.count do
-            assert_difference "Credential.count", -users(:keith).credentials.count do
-              assert_difference "Memory.count", -users(:keith).memories.count do
-                users(:keith).destroy
-              end
-            end
+    assert_difference "Assistant.count", -users(:keith).assistants_including_deleted.count do
+      assert_difference "Conversation.count", -users(:keith).conversations.count do
+        assert_difference "Credential.count", -users(:keith).credentials.count do
+          assert_difference "Memory.count", -users(:keith).memories.count do
+            users(:keith).destroy
           end
         end
       end

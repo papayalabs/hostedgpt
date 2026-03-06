@@ -6,7 +6,7 @@ class GetNextAIMessageJobGeminiTest < ActiveJob::TestCase
     @user = @conversation.user
     @assistant = @conversation.assistant
     @conversation.messages.create! role: :user, content_text: "Still there?", assistant: @assistant
-    @assistant.language_model.update!(supports_tools: false) # this will change the TestClient response so we want to be selective about this
+    @assistant.update!(supports_tools: false) # this will change the TestClient response so we want to be selective about this
     @message = @conversation.latest_message_for_version(:latest)
     @test_client = TestClient::Gemini.new(access_token: "abc")
   end
@@ -40,8 +40,7 @@ class GetNextAIMessageJobGeminiTest < ActiveJob::TestCase
   end
 
   test "when Gemini key is blank, a nice error message is displayed" do
-    api_service = @assistant.language_model.api_service
-    api_service.update!(token: "")
+    @assistant.update!(token: "")
 
     assert GetNextAIMessageJob.perform_now(@user.id, @message.id, @assistant.id)
     assert_includes @conversation.latest_message_for_version(:latest).content_text, "There is a configuration error with the Gemini API Service"

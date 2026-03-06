@@ -1,7 +1,6 @@
 class Settings::AssistantsController < Settings::ApplicationController
   before_action :set_assistant, only: [:edit, :update, :destroy]
   before_action :set_last_assistant, except: [:destroy]
-  before_action :set_language_models, except: [:destroy]
 
   def new
     @assistant = Assistant.new
@@ -49,14 +48,11 @@ class Settings::AssistantsController < Settings::ApplicationController
     @last_assistant = Current.user.assistants.count <= 1
   end
 
-  def set_language_models
-    @models = LanguageModel.for_user(Current.user).ordered.pluck(:name, :id, :api_service_id)
-    @models.each_with_index do |model, index|
-      @models[index] = [model[0] + " (" + APIService.find(model[2]).name + ")", model[1]]
-    end
-  end
-
   def assistant_params
-    params.require(:assistant).permit(:name, :slug, :description, :instructions, :language_model_id)
+    params.require(:assistant).permit(
+      :name, :slug, :description, :instructions,
+      :provider_name, :driver, :url, :token,
+      :api_name, :supports_images, :supports_tools, :supports_system_message, :supports_pdf
+    )
   end
 end

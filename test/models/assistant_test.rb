@@ -17,9 +17,9 @@ class AssistantTest < ActiveSupport::TestCase
     assert_equal "Samantha", samantha.to_s
   end
 
-  test "language_model_api_name=" do
+  test "api_name can be updated directly" do
     assistant = assistants(:samantha)
-    assistant.language_model_api_name = "gpt-4o"
-    assert_equal language_models(:gpt_4o), assistant.language_model
+    assistant.update!(api_name: "gpt-4o")
+    assert_equal "gpt-4o", assistant.api_name
   end
 end

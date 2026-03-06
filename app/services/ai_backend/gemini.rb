@@ -39,16 +39,16 @@ class AIBackend::Gemini < AIBackend
   def initialize(user, assistant, conversation = nil, message = nil)
     super(user, assistant, conversation, message)
     begin
-      raise configuration_error if assistant.api_service.requires_token? && assistant.api_service.effective_token.blank?
-      Rails.logger.info "Connecting to Gemini API server at #{assistant.api_service.url} with access token of length #{assistant.api_service.effective_token.to_s.length}"
+      raise configuration_error if assistant.requires_token? && assistant.effective_token.blank?
+      Rails.logger.info "Connecting to Gemini API server at #{assistant.url} with access token of length #{assistant.effective_token.to_s.length}"
       @client = self.class.client.new(
         credentials: {
           service: "generative-language-api",
-          api_key: assistant.api_service.effective_token,
+          api_key: assistant.effective_token,
           version: "v1beta"
         },
         options: {
-          model: assistant.language_model.api_name,
+          model: assistant.api_name,
           server_sent_events: true
         }
       )
@@ -70,7 +70,7 @@ class AIBackend::Gemini < AIBackend
 
     @client_config =  {
       contents: config[:messages],
-      system_instruction: ( system_message(config[:instructions]) if @assistant.language_model.supports_system_message?)
+      system_instruction: ( system_message(config[:instructions]) if @assistant.supports_system_message?)
     }.compact
   end
 

@@ -4,7 +4,7 @@ class AIBackend::OpenAITest < ActiveSupport::TestCase
   setup do
     @conversation = conversations(:attachments)
     @assistant = assistants(:keith_gpt4)
-    @assistant.language_model.update!(supports_tools: false) # this will change the TestClient response so we want to be selective about this
+    @assistant.update!(supports_tools: false) # this will change the TestClient response so we want to be selective about this
     @openai = AIBackend::OpenAI.new(
       users(:keith),
       @assistant,
@@ -62,7 +62,7 @@ class AIBackend::OpenAITest < ActiveSupport::TestCase
   end
 
   test "tools only passed when supported by the language model" do
-    @assistant.language_model.update!(supports_tools: true)
+    @assistant.update!(supports_tools: true)
     function = "openmeteo_get_current_and_todays_weather"
     streamed_text = ""
 
@@ -104,7 +104,7 @@ class AIBackend::OpenAITest < ActiveSupport::TestCase
   end
 
   test "stream_next_conversation_message works to get a function call" do
-    @assistant.language_model.update!(supports_tools: true)
+    @assistant.update!(supports_tools: true)
     function = "openmeteo_get_current_and_todays_weather"
 
     TestClient::OpenAI.stub :function, function do
@@ -114,7 +114,7 @@ class AIBackend::OpenAITest < ActiveSupport::TestCase
   end
 
   test "stream_next_conversation_message works to get a parallel function call CORRECTLY formatted" do
-    @assistant.language_model.update!(supports_tools: true)
+    @assistant.update!(supports_tools: true)
     function = "openmeteo_get_current_and_todays_weather"
 
     TestClient::OpenAI.stub :function, function do
@@ -129,7 +129,7 @@ class AIBackend::OpenAITest < ActiveSupport::TestCase
   end
 
   test "stream_next_conversation_message works to get a parallel function call INCORRECTLY formatted" do
-    @assistant.language_model.update!(supports_tools: true)
+    @assistant.update!(supports_tools: true)
     function = "openmeteo_get_current_and_todays_weather"
     arguments = {:city=>"Austin", :state=>"TX", :country=>"US"}.to_json
 

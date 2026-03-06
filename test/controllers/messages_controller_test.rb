@@ -215,7 +215,11 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
 
   test "when there are many assistants only a few are shown in the nav bar" do
     5.times do |x|
-      @user.assistants.create! name: "New assistant #{x+1}", language_model: LanguageModel.find_by(api_name: "gpt-3.5-turbo")
+      ref = assistants(:keith_gpt4)
+      @user.assistants.create! name: "New assistant #{x+1}",
+        provider_name: ref.provider_name, driver: ref.driver, url: ref.url, api_name: ref.api_name,
+        supports_images: ref.supports_images, supports_tools: ref.supports_tools,
+        supports_system_message: ref.supports_system_message, supports_pdf: ref.supports_pdf
     end
     get conversation_messages_url(@conversation, version: 1)
     @user.assistants.each do |assistant|

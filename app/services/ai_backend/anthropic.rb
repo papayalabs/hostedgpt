@@ -37,9 +37,9 @@ class AIBackend::Anthropic < AIBackend
   def initialize(user, assistant, conversation = nil, message = nil)
     super(user, assistant, conversation, message)
     begin
-      raise ::Anthropic::ConfigurationError if assistant.api_service.requires_token? && assistant.api_service.effective_token.blank?
-      Rails.logger.info "Connecting to Anthropic API server at #{assistant.api_service.url} with access token of length #{assistant.api_service.effective_token.to_s.length}"
-      @client = self.class.client.new(uri_base: assistant.api_service.url, access_token: assistant.api_service.effective_token)
+      raise ::Anthropic::ConfigurationError if assistant.requires_token? && assistant.effective_token.blank?
+      Rails.logger.info "Connecting to Anthropic API server at #{assistant.url} with access token of length #{assistant.effective_token.to_s.length}"
+      @client = self.class.client.new(uri_base: assistant.url, access_token: assistant.effective_token)
     rescue ::Faraday::UnauthorizedError => e
       raise ::Anthropic::ConfigurationError
     end
@@ -124,17 +124,17 @@ class AIBackend::Anthropic < AIBackend
     super(config)
 
     @client_config = {
-      model: @assistant.language_model.api_name,
+      model: @assistant.api_name,
       system: config[:instructions],
       messages: config[:messages],
-      tools: @assistant.language_model.supports_tools? && anthropic_format_tools(Toolbox.tools) || nil,
+      tools: @assistant.supports_tools? && anthropic_format_tools(Toolbox.tools) || nil,
       parameters: {
-        model: @assistant.language_model.api_name,
+        model: @assistant.api_name,
         system: config[:instructions],
         messages: config[:messages],
         max_tokens: 2000, # we should really set this dynamically, based on the model, to the max
         stream: config[:streaming] && @response_handler || nil,
-        tools: @assistant.language_model.supports_tools? && anthropic_format_tools(Toolbox.tools) || nil,
+        tools: @assistant.supports_tools? && anthropic_format_tools(Toolbox.tools) || nil,
       }.compact.merge(config[:params]&.except(:response_format) || {})
     }.compact
   end

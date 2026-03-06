@@ -6,7 +6,7 @@ class GetNextAIMessageJobOpenaiTest < ActiveJob::TestCase
     @user = @conversation.user
     @assistant = @conversation.assistant
     @conversation.messages.create! role: :user, content_text: "Still there?", assistant: @assistant
-    @assistant.language_model.update!(supports_tools: false) # this will change the TestClient response so we want to be selective about this
+    @assistant.update!(supports_tools: false) # this will change the TestClient response so we want to be selective about this
     @message = @conversation.latest_message_for_version(:latest)
     @test_client = TestClient::OpenAI.new(access_token: "abc")
   end
@@ -22,7 +22,7 @@ class GetNextAIMessageJobOpenaiTest < ActiveJob::TestCase
   end
 
   test "populates a tool response call from the assistant and creates additional tool messages" do
-    @assistant.language_model.update!(supports_tools: true)
+    @assistant.update!(supports_tools: true)
 
     assert_difference "@conversation.messages.reload.length", 2 do
       TestClient::OpenAI.stub :function, "helloworld_hi" do
@@ -61,7 +61,7 @@ class GetNextAIMessageJobOpenaiTest < ActiveJob::TestCase
     @image_generation.messages.create! role: :user, content_text: "Generate an image", assistant: @image_generation.assistant
     @image_generation_message = @image_generation.latest_message_for_version(:latest)
 
-    @image_generation.assistant.language_model.update!(supports_tools: true)
+    @image_generation.assistant.update!(supports_tools: true)
 
     image_generation_prompt = "Kitten"
 
@@ -138,8 +138,7 @@ class GetNextAIMessageJobOpenaiTest < ActiveJob::TestCase
 
   test "when openai key is blank, a nice error message is displayed" do
     stub_features(default_llm_keys: false) do
-      api_service = @assistant.language_model.api_service
-      api_service.update!(token: "")
+      @assistant.update!(token: "")
 
       assert GetNextAIMessageJob.perform_now(@user.id, @message.id, @assistant.id)
       assert_includes @conversation.latest_message_for_version(:latest).content_text, "need to enter a valid API key for OpenAI"

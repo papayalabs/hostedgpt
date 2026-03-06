@@ -5,7 +5,7 @@ class AIBackend::AnthropicTest < ActiveSupport::TestCase
   setup do
     @conversation = conversations(:hello_claude)
     @assistant = assistants(:keith_claude35)
-    @assistant.language_model.update!(supports_tools: false) # this will change the TestClient response so we want to be selective about this
+    @assistant.update!(supports_tools: false) # this will change the TestClient response so we want to be selective about this
     @anthropic = AIBackend::Anthropic.new(
       users(:keith),
       @assistant,
@@ -266,7 +266,7 @@ class AIBackend::AnthropicTest < ActiveSupport::TestCase
   end
 
   test "tools only passed when supported by the language model" do
-    @assistant.language_model.update!(supports_tools: true)
+    @assistant.update!(supports_tools: true)
     @anthropic.instance_variable_set(:@response_handler, proc {})
 
     @anthropic.send(:set_client_config, {
@@ -282,7 +282,7 @@ class AIBackend::AnthropicTest < ActiveSupport::TestCase
   end
 
   test "tools not passed when not supported by the language model" do
-    @assistant.language_model.update!(supports_tools: false)
+    @assistant.update!(supports_tools: false)
     @anthropic.instance_variable_set(:@response_handler, proc {})
 
     @anthropic.send(:set_client_config, {
@@ -298,7 +298,7 @@ class AIBackend::AnthropicTest < ActiveSupport::TestCase
   end
 
   test "stream_next_conversation_message works to get a tool call" do
-    @assistant.language_model.update!(supports_tools: true)
+    @assistant.update!(supports_tools: true)
 
     TestClient::Anthropic.stub :function, "openmeteo_get_current_and_todays_weather" do
       tool_calls = @anthropic.stream_next_conversation_message { |chunk| }
@@ -309,7 +309,7 @@ class AIBackend::AnthropicTest < ActiveSupport::TestCase
   test "preceding_conversation_messages processes PDF documents" do
     # Create a new conversation with a message that has a PDF document
     assistant = assistants(:keith_claude35)
-    assistant.language_model.update!(supports_pdf: true)
+    assistant.update!(supports_pdf: true)
 
     # Verify supports_pdf? works
     assert assistant.supports_pdf?, "Assistant should support PDF processing"
@@ -376,7 +376,7 @@ class AIBackend::AnthropicTest < ActiveSupport::TestCase
   test "preceding_conversation_messages handles PDF extraction errors gracefully" do
     # Create a new conversation with a message that has a corrupted PDF document
     assistant = assistants(:keith_claude35)
-    assistant.language_model.update!(supports_pdf: true)
+    assistant.update!(supports_pdf: true)
 
     conversation = Conversation.create!(
       user: users(:keith),

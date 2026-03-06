@@ -5,7 +5,7 @@ class AIBackend::GeminiTest < ActiveSupport::TestCase
   setup do
     @conversation = conversations(:hello_claude)
     @assistant = assistants(:keith_claude35)
-    @assistant.language_model.update!(supports_tools: false)
+    @assistant.update!(supports_tools: false)
     @gemini = AIBackend::Gemini.new(
       users(:keith),
       @assistant,
@@ -22,7 +22,7 @@ class AIBackend::GeminiTest < ActiveSupport::TestCase
   test "preceding_conversation_messages processes PDF documents" do
     # Create a new conversation with a message that has a PDF document
     assistant = assistants(:keith_claude35)
-    assistant.language_model.update!(supports_pdf: true)
+    assistant.update!(supports_pdf: true)
 
     conversation = Conversation.create!(
       user: users(:keith),
@@ -83,7 +83,7 @@ class AIBackend::GeminiTest < ActiveSupport::TestCase
   test "preceding_conversation_messages handles PDF extraction errors gracefully" do
     # Create a new conversation with a message that has a corrupted PDF document
     assistant = assistants(:keith_claude35)
-    assistant.language_model.update!(supports_pdf: true)
+    assistant.update!(supports_pdf: true)
 
     conversation = Conversation.create!(
       user: users(:keith),
