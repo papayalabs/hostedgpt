@@ -1,4 +1,4 @@
-<%= form_with(model: [:settings, assistant], class: "contents") do |form| %>
+<%= form_with(model: assistant, url: assistant.persisted? ? settings_assistant_path(assistant) : settings_assistants_path, class: "contents") do |form| %>
   <% if assistant.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
   <h2><%= t('app.settings.assistants.form.errors_title', count: assistant.errors.count) %></h2>
@@ -47,7 +47,7 @@
   <div class="my-5">
   <%= form.label :driver, t('app.settings.assistants.form.driver') %>
     <%= form.select :driver,
-      Assistant.drivers.keys.map { |d| [d.capitalize, d] },
+      Agent::Assistant.drivers.keys.map { |d| [d.capitalize, d] },
       {},
       class: %|
         block

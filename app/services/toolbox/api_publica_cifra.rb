@@ -7,7 +7,7 @@
   #   2. signature = HMAC_SHA256(secret_key, token) en hexadecimal
   #   3. Peticiones autenticadas con headers Authorization + signature
   #
-  # Credenciales configuradas en Setting:
+  # Credenciales configuradas en Agent::Setting:
   #   - api_publica_cifra_url       → URL base (por defecto http://localhost:3000)
   #   - api_publica_cifra_api_key   → clave pública del cliente API
   #   - api_publica_cifra_secret_key → clave privada para el HMAC
@@ -270,15 +270,15 @@
     end
 
     def base_url
-      Setting.api_publica_cifra_url.presence || "http://localhost:3000"
+      Agent::Setting.api_publica_cifra_url.presence || "http://localhost:3000"
     end
 
     def api_key
-      Setting.api_publica_cifra_api_key
+      Agent::Setting.api_publica_cifra_api_key
     end
 
     def secret_key
-      Setting.api_publica_cifra_secret_key.presence || "secret"
+      Agent::Setting.api_publica_cifra_secret_key.presence || "secret"
     end
 
     def cabeceras_auth
@@ -307,8 +307,8 @@
     def ejecutar_login_uuid
       endpoint = url("/api/login?&uuid=111")
       body = {
-        user: Setting.api_publica_cifra_user,
-        password: Setting.api_publica_cifra_password
+        user: Agent::Setting.api_publica_cifra_user,
+        password: Agent::Setting.api_publica_cifra_password
       }
       respuesta = post(endpoint).www_content.param(body)
       respuesta.try(:data)&.try(:token) || respuesta.try(:token)

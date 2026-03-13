@@ -92,7 +92,7 @@ Rails.application.configure do
 
   # TODO should we combine this with APP_URL_HOST?
   config.hosts << ENV["DEV_HOST"] if ENV["DEV_HOST"].present?
-  config.hosts << Setting.app_url_host if Setting.key_set?(:app_url_host)
+  config.hosts << Agent::Setting.app_url_host if Agent::Setting.key_set?(:app_url_host)
 
   stdout_logger = ActiveSupport::Logger.new(STDOUT)
   tagged_logger = ActiveSupport::TaggedLogging.new(stdout_logger)

@@ -23,11 +23,11 @@
         data: { role: "name" } do
   %>
 
-    <% if item.is_a?(Assistant) %>
+    <% if item.is_a?(Agent::Assistant) %>
       <div id="profile" class="mr-2 w-7 h-7 bg-blue-200 rounded-full"></div>
     <% end %>
 
-    <span class="<%= !item.is_a?(Assistant) && "ml-1 text-base" %>">
+    <span class="<%= !item.is_a?(Agent::Assistant) && "ml-1 text-base" %>">
       <%= item %>
     </span>
   <% end %>

@@ -23,7 +23,7 @@ module Authenticate
   private
 
   def signed_in?
-    Current.user.present?
+    Agent::Current.user.present?
   end
 
   def require_authentication
@@ -31,7 +31,7 @@ module Authenticate
   end
 
   def restore_authentication
-    Current.initialize_with(client: find_client)
+    Agent::Current.initialize_with(client: find_client)
   end
 
   def request_authentication

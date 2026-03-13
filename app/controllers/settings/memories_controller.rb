@@ -2,7 +2,7 @@ class Settings::MemoriesController < Settings::ApplicationController
   before_action :set_memory, only: :destroy
 
   def index
-    @memories = Current.user.memories.includes(:message)
+    @memories = Agent::Current.user.memories.includes(:message)
   end
 
   def destroy
@@ -11,13 +11,13 @@ class Settings::MemoriesController < Settings::ApplicationController
   end
 
   def destroy_all
-    Current.user.memories.delete_all
+    Agent::Current.user.memories.delete_all
     redirect_to settings_memories_url, notice: I18n.t("app.flashes.memories.cleared"), status: :see_other
   end
 
   private
 
   def set_memory
-    @memory = Current.user.memories.find_by(id: params[:id])
+    @memory = Agent::Current.user.memories.find_by(id: params[:id])
   end
 end

@@ -7,8 +7,8 @@ require_relative "../lib/string"
 require_relative "../lib/false_class"
 require_relative "../lib/true_class"
 require_relative "../lib/nil_class"
-require_relative "../app/models/feature"
-require_relative "../app/models/setting"
+require_relative "../app/models/agent/feature"
+require_relative "../app/models/agent/setting"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -44,27 +44,27 @@ module HostedGPT
     config.active_support.to_time_preserves_timezone = :zone
 
     url_settings = [:app_url_protocol, :app_url_host]
-    if url_settings.any?{|k| Setting.key_set?(k)}
-      Setting.require_keys!(*url_settings)
+    if url_settings.any?{|k| Agent::Setting.key_set?(k)}
+      Agent::Setting.require_keys!(*url_settings)
 
-      config.x.app_url_protocol = Setting.app_url_protocol
-      config.x.app_url_host = Setting.app_url_host
+      config.x.app_url_protocol = Agent::Setting.app_url_protocol
+      config.x.app_url_host = Agent::Setting.app_url_host
 
-      port = Setting.app_url_port.to_s
+      port = Agent::Setting.app_url_port.to_s
       if port.blank? || port == "80"
         config.x.app_url_port = nil
       else
-        config.x.app_url_port = Setting.app_url_port
+        config.x.app_url_port = Agent::Setting.app_url_port
       end
 
       port_str = config.x.app_url_port.present? ? ":#{port}" : ""
-      config.x.app_url = "#{Setting.app_url_protocol}://#{Setting.app_url_host}#{port_str}"
+      config.x.app_url = "#{Agent::Setting.app_url_protocol}://#{Agent::Setting.app_url_host}#{port_str}"
     else
       config.x.app_url = nil
     end
 
     # Active Storage
-    if Feature.cloudflare_storage?
+    if Agent::Feature.cloudflare_storage?
       config.active_storage.service = :cloudflare
     else
       config.active_storage.service = :database

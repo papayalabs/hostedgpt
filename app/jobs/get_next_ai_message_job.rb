@@ -17,10 +17,10 @@ class GetNextAIMessageJob < ApplicationJob
   def perform(user_id, message_id, assistant_id, attempt = 1)
     Rails.logger.info "### GetNextAIMessageJob.perform(#{user_id}, #{message_id}, #{assistant_id}, #{attempt})" unless Rails.env.test?
 
-    @user         = User.find(user_id)
-    @message      = Message.find(message_id)
+    @user         = Agent::User.find(user_id)
+    @message      = Agent::Message.find(message_id)
     @conversation = @message.conversation
-    @assistant    = Assistant.find(assistant_id)
+    @assistant    = Agent::Assistant.find(assistant_id)
     @prev_message = @conversation.messages.assistant.for_conversation_version(@message.version).find_by(index: @message.index-1)
     @attempt      = attempt
 
@@ -33,7 +33,7 @@ class GetNextAIMessageJob < ApplicationJob
 
     Rails.logger.info "\n### Wait for reply" unless Rails.env.test?
 
-    response = Current.set(user: @user, message: @message) do
+    response = Agent::Current.set(user: @user, message: @message) do
       ai_backend.new(@conversation.user, @assistant, @conversation, @message)
       .stream_next_conversation_message do |content_chunk|
         @message.content_text += content_chunk
@@ -200,7 +200,7 @@ class GetNextAIMessageJob < ApplicationJob
     Rails.logger.info "\n### Calling tools" unless Rails.env.test?
 
     msgs = []
-    Current.set(user: @user, message: @message) do
+    Agent::Current.set(user: @user, message: @message) do
       msgs = ai_backend.get_tool_messages_by_calling(@message.content_tool_calls)
     end
 

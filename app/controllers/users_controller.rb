@@ -7,12 +7,12 @@ class UsersController < ApplicationController
   layout "public"
 
   def new
-    @user = User.new
+    @user = Agent::User.new
     @user.errors.add(:base, flash[:errors]) if flash[:errors]
   end
 
   def create
-    @user = User.new(user_create_params)
+    @user = Agent::User.new(user_create_params)
 
     if @user.save
       login_as(@user)
@@ -24,7 +24,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_update_params)
-      Current.user.reload
+      Agent::Current.user.reload
       redirect_back fallback_location: root_path, status: :see_other
     else
       redirect_back fallback_location: root_path, status: :unprocessable_content
@@ -34,20 +34,20 @@ class UsersController < ApplicationController
   private
 
   def ensure_registration_allowed
-    if Feature.disabled?(:registration)
+    if Agent::Feature.disabled?(:registration)
       head :not_found
     end
   end
 
   def set_user
-    @user = Current.user if params[:id].to_i == Current.user.id
+    @user = Agent::Current.user if params[:id].to_i == Agent::Current.user.id
   end
 
   def user_create_params
-    params.require(:user).permit(:email, :first_name, :last_name, :password)
+    params.require(:agent_user).permit(:email, :first_name, :last_name, :password)
   end
 
   def user_update_params
-    params.require(:user).permit(preferences: [:nav_closed, :dark_mode])
+    params.require(:agent_user).permit(preferences: [:nav_closed, :dark_mode])
   end
 end

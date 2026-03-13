@@ -3,7 +3,7 @@ class Settings::UsersController < Settings::ApplicationController
   end
 
   def update
-    if Current.user.update(user_params)
+    if Agent::Current.user.update(user_params)
       redirect_to edit_settings_user_path, notice: I18n.t("app.flashes.assistants.saved"), status: :see_other
     else
       render :edit, status: :unprocessable_content

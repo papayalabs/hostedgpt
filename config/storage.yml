@@ -7,8 +7,8 @@ database_public:
 
 cloudflare:
   service: S3
-  endpoint: https://<%= Setting.cloudflare_account_id %>.r2.cloudflarestorage.com
-  access_key_id: <%= Setting.cloudflare_access_key_id %>
-  secret_access_key: <%= Setting.cloudflare_secret_access_key %>
+  endpoint: https://<%= Agent::Setting.cloudflare_account_id %>.r2.cloudflarestorage.com
+  access_key_id: <%= Agent::Setting.cloudflare_access_key_id %>
+  secret_access_key: <%= Agent::Setting.cloudflare_secret_access_key %>
   region: auto
-  bucket: <%= Setting.cloudflare_bucket %>
+  bucket: <%= Agent::Setting.cloudflare_bucket %>

@@ -1,5 +1,5 @@
 <% content_for :heading, t('app.auth.welcome_back') %>
-<% if Feature.registration? %>
+<% if Agent::Feature.registration? %>
   <span class="text-sm text-center">
     <%= t('app.auth.no_account') %> <%= link_to t('app.auth.sign_up'), register_path, class: "underline" %>
   </span>

@@ -16,7 +16,7 @@ class Settings::ApplicationController < ApplicationController
   I18n.t("app.settings.memories.menu.title") => settings_memories_path,
       },
 
-      assistants: Current.user.assistants.ordered.map {
+      assistants: Agent::Current.user.assistants.ordered.map {
         |assistant| [ assistant, edit_settings_assistant_path(assistant) ]
       }.to_h.merge({
   I18n.t("app.settings.assistants.menu.new") => new_settings_assistant_path

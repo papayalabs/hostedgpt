@@ -7,7 +7,7 @@ class AuthenticationsController < ApplicationController
   end
 
   def create
-    user = User.find_by(email: params[:email].to_s.downcase.strip)
+    user = Agent::User.find_by(email: params[:email].to_s.downcase.strip)
 
     if user&.authenticate(params[:password])
       login_as(user)

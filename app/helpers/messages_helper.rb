@@ -3,7 +3,7 @@ require "./lib/markdown_renderer"
 module MessagesHelper
   def render_avatar_for(message)
     if message.user?
-      render partial: "layouts/user_avatar",      locals: { user: Current.user,           size: 7, classes: "mt-1" }
+      render partial: "layouts/user_avatar",      locals: { user: Agent::Current.user,           size: 7, classes: "mt-1" }
     elsif message.tool?
       render partial: "layouts/tool_avatar"
     else

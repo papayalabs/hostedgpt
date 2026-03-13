@@ -6,14 +6,14 @@ module Authenticate::LoginLogout
   end
 
   def logout_current
-    Current.client.logout!
+    Agent::Current.client.logout!
     reset_authentication
   end
 
   private
 
   def find_or_create_client_for(user)
-    Current.client || user.clients.create!(
+    Agent::Current.client || user.clients.create!(
       platform: :web,
       user_agent: request.user_agent,
       ip_address: request.remote_ip,
@@ -21,7 +21,7 @@ module Authenticate::LoginLogout
   end
 
   def session_authenticate_with(client)
-    if Current.initialize_with(client: client)
+    if Agent::Current.initialize_with(client: client)
       session[:client_token] = client.token
       cookies.signed.permanent[:client_token] = { value: client.token, httponly: true, same_site: :lax }
     end
@@ -30,7 +30,7 @@ module Authenticate::LoginLogout
   def reset_authentication
     session.delete(:client_token)
     cookies.delete(:client_token)
-    Current.reset
+    Agent::Current.reset
   end
 
   def manual_login_allowed?

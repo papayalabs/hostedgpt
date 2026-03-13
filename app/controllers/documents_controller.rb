@@ -3,21 +3,21 @@ class DocumentsController < ApplicationController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
 
   def index
-    @documents = Document.all
+    @documents = Agent::Document.all
   end
 
   def show
   end
 
   def new
-    @document = Document.new
+    @document = Agent::Document.new
   end
 
   def edit
   end
 
   def create
-    @document = Document.new(document_params)
+    @document = Agent::Document.new(document_params)
 
     if @document.save
       redirect_to @document, notice: I18n.t("app.flashes.documents.created"), status: :see_other
@@ -42,10 +42,10 @@ class DocumentsController < ApplicationController
   private
 
   def set_document
-    @document = Document.find(params[:id])
+    @document = Agent::Document.find(params[:id])
   end
 
   def document_params
-    params.require(:document).permit(:user_id, :assistant_id, :message_id, :filename, :purpose, :bytes)
+    params.require(:agent_document).permit(:user_id, :assistant_id, :message_id, :filename, :purpose, :bytes)
   end
 end

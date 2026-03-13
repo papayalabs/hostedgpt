@@ -3,7 +3,7 @@ class Settings::AssistantsController < Settings::ApplicationController
   before_action :set_last_assistant, except: [:destroy]
 
   def new
-    @assistant = Assistant.new
+    @assistant = Agent::Assistant.new
   end
 
   def edit
@@ -38,18 +38,18 @@ class Settings::AssistantsController < Settings::ApplicationController
   private
 
   def set_assistant
-    @assistant = Current.user.assistants.find_by(id: params[:id])
+    @assistant = Agent::Current.user.assistants.find_by(id: params[:id])
     if @assistant.nil?
       redirect_to new_settings_assistant_url, notice: I18n.t("app.flashes.assistants.deleted_full"), status: :see_other
     end
   end
 
   def set_last_assistant
-    @last_assistant = Current.user.assistants.count <= 1
+    @last_assistant = Agent::Current.user.assistants.count <= 1
   end
 
   def assistant_params
-    params.require(:assistant).permit(
+    params.require(:agent_assistant).permit(
       :name, :slug, :description, :instructions,
       :provider_name, :driver, :url, :token,
       :api_name, :supports_images, :supports_tools, :supports_system_message, :supports_pdf

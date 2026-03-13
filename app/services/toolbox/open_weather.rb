@@ -2,7 +2,7 @@ class Toolbox::OpenWeather < Toolbox
   # Followed this guide: https://openweathermap.org/current
 
   def self.key
-    Setting.openweather_key
+    Agent::Setting.openweather_key
   end
 
   describe :get_current_and_todays_weather, <<~S

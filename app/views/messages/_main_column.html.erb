@@ -3,7 +3,7 @@
   class="relative flex flex-col flex-1"
   data-turbo-action="advance"
 >
-  <%= button_to user_path(Current.user),
+  <%= button_to user_path(Agent::Current.user),
     id: "handle",
     form_class: %|
       hidden md:flex
@@ -13,7 +13,7 @@
       group
     |,
     method: :patch,
-    params: { user: { preferences: { nav_closed: !Current.user.preferences[:nav_closed] } } },
+    params: { user: { preferences: { nav_closed: !Agent::Current.user.preferences[:nav_closed] } } },
     class: %| flex-1 flex w-8 h-20
     |,
     data: {
@@ -33,7 +33,7 @@
         flex-1 flex h-full
         items-center justify-center
         tooltip tooltip-right hover:tooltip-open
-        <%= Current.user.preferences[:nav_closed] && "!hidden" %>
+        <%= Agent::Current.user.preferences[:nav_closed] && "!hidden" %>
       "
   data-tip="<%= t('app.conversations.ui.close_sidebar') %>"
     >
@@ -49,7 +49,7 @@
         flex-1 flex h-full
         items-center justify-center
         tooltip tooltip-right hover:tooltip-open
-        <%= !Current.user.preferences[:nav_closed] && "!hidden" %>
+        <%= !Agent::Current.user.preferences[:nav_closed] && "!hidden" %>
       "
   data-tip="<%= t('app.conversations.ui.open_sidebar') %>"
     >
@@ -219,6 +219,8 @@
         <% if @streaming_message %>
           <%= form_with(
             model: @streaming_message,
+            url: message_path(@streaming_message),
+            method: :patch,
             class: %|
               z-20
               absolute
@@ -258,6 +260,8 @@
 
         <%= form_with(
           model: [@assistant, @new_message],
+          url: assistant_messages_path(@assistant),
+          method: :post,
           data: {
             composer_target: "form",
             turbo_frame: "_top", # this causes the page to morph, without this it does a frame substitution
@@ -321,7 +325,7 @@
 
           <!-- options for the composer right button -->
 
-          <% if Feature.voice? %>
+          <% if Agent::Feature.voice? %>
             <%= form.button type: "button",
               data: {
                 composer_target: "microphoneDisable",
@@ -364,7 +368,7 @@
 
           <!-- the cancel button is z-20, it's declared above the current form and positioned in this same spot -->
 
-          <% if Feature.voice? %>
+          <% if Agent::Feature.voice? %>
             <div
               id="microphone-enable"
               data-composer-target="microphoneEnable"
@@ -410,7 +414,7 @@
               text-gray-100 dark:text-gray-600
               enabled:text-black
               enabled:dark:text-white
-              #{Feature.voice? && '!hidden'}
+              #{Agent::Feature.voice? && '!hidden'}
             | do
           %>
             <%= icon "arrow-up-circle", variant: :solid, size: 39, title: t('app.conversations.ui.send_message'), tooltip: :top %>

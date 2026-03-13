@@ -4,13 +4,13 @@ module Scopes::Lib
 
     included do
       def self.add_time_scopes
-        ::Scopes::Lib::AddTimeRelated.new(self).add_scopes_to
+        ::Agent::Scopes::Lib::AddTimeRelated.new(self).add_scopes_to
       end
 
       add_time_scopes
 
       def self.add_time_scopes_to_association(assoc)
-        ::Scopes::Lib::AddTimeRelated.new(self).add_scopes_to_association(assoc)
+        ::Agent::Scopes::Lib::AddTimeRelated.new(self).add_scopes_to_association(assoc)
       end
     end
   end

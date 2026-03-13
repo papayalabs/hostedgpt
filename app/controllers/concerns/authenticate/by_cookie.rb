@@ -5,7 +5,7 @@ module Authenticate::ByCookie
   private
 
   def find_client_by_cookie
-    Client.find_by(token: session_token) unless session_token.blank?
+    Agent::Client.find_by(token: session_token) unless session_token.blank?
   end
 
   def session_token

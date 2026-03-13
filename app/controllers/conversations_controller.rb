@@ -5,7 +5,7 @@ class ConversationsController < ApplicationController
 
   def index
     @query = params[:query]
-    @nav_conversations = Conversation.grouped_by_increasing_time_interval_for_user(Current.user, @query)
+    @nav_conversations = Agent::Conversation.grouped_by_increasing_time_interval_for_user(Agent::Current.user, @query)
   end
 
   def show
@@ -41,14 +41,14 @@ class ConversationsController < ApplicationController
   private
 
   def set_nav_assistants
-    @nav_assistants = Current.user.assistants.ordered
+    @nav_assistants = Agent::Current.user.assistants.ordered
   end
 
   def set_conversation
-    @conversation = Current.user.conversations.find_by(id: params[:id] || params[:conversation_id])
+    @conversation = Agent::Current.user.conversations.find_by(id: params[:id] || params[:conversation_id])
   end
 
   def conversation_params
-    params.require(:conversation).permit(:user_id, :assistant_id, :title)
+    params.require(:agent_conversation).permit(:user_id, :assistant_id, :title)
   end
 end

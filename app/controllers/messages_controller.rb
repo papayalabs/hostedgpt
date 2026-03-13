@@ -19,7 +19,7 @@ class MessagesController < ApplicationController
 
     @messages = @conversation.messages.for_conversation_version(@version)
     @new_message = @assistant.messages.new(conversation: @conversation)
-    @streaming_message = Message.where(
+    @streaming_message = Agent::Message.where(
       content_text: [nil, ""],
       cancelled_at: nil
     ).find_by(id: @conversation.last_assistant_message_id)
@@ -41,7 +41,7 @@ class MessagesController < ApplicationController
 
     if @message.save
       after_create_assistant_reply = @message.conversation.latest_message_for_version(@message.version)
-      GetNextAIMessageJob.perform_later(Current.user.id, after_create_assistant_reply.id, @assistant.id)
+      GetNextAIMessageJob.perform_later(Agent::Current.user.id, after_create_assistant_reply.id, @assistant.id)
       redirect_to conversation_messages_path(@message.conversation, version: @message.version), status: :see_other
     else
       # what's the right flow for a failed message create? it's not this, but hacking it so tests pass until we have a plan
@@ -67,11 +67,11 @@ class MessagesController < ApplicationController
   end
 
   def set_conversation
-    @conversation = Current.user.conversations.find(params[:conversation_id])
+    @conversation = Agent::Current.user.conversations.find(params[:conversation_id])
   end
 
   def set_assistant
-    @assistant = Current.user.assistants_including_deleted.find_by(id: params[:assistant_id])
+    @assistant = Agent::Current.user.assistants_including_deleted.find_by(id: params[:assistant_id])
     @assistant ||= @conversation.latest_message_for_version(@version)&.assistant
     @assistant ||= @conversation.assistant
   end
@@ -82,7 +82,7 @@ class MessagesController < ApplicationController
   end
 
   def set_nav_assistants
-    @nav_assistants = Current.user.assistants.ordered
+    @nav_assistants = Agent::Current.user.assistants.ordered
   end
 
   def message_params
