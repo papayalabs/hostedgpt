@@ -1,4 +1,4 @@
-class ActiveStorage::Postgresql::File < ApplicationRecord
+class ActiveStorage::Postgresql::File < Agent::ApplicationRecord
   attribute :oid, :integer, default: ->{ connection.raw_connection.lo_creat }
 
   delegate :lo_seek, :lo_tell, :lo_import, :lo_read, :lo_write, :lo_open,

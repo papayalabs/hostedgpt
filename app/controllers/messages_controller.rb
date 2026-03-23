@@ -86,7 +86,7 @@ class MessagesController < ApplicationController
   end
 
   def message_params
-    modified_params = params.require(:message).permit(
+    modified_params = params.require(:agent_message).permit(
       :conversation_id,
       :content_text,
       :assistant_id,
