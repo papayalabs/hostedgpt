@@ -1,0 +1,33 @@
+<% content_for :heading, t('app.auth.welcome_back') %>
+<% if Agent::Feature.registration? %>
+  <span class="text-sm text-center">
+    <%= t('app.auth.no_account') %> <%= link_to t('app.auth.sign_up'), register_path, class: "underline" %>
+  </span>
+<% end %>
+
+<%= form_with(url: login_path, method: :post, class: "flex flex-col space-y-4 w-80") do |f| %>
+  <%= f.email_field :email,
+    value: params[:email],
+    id: "email",
+    autofocus: params[:email].present? ? false : true,
+    placeholder: t('app.auth.email_address'),
+    class: "border border-gray-400 rounded p-3 dark:text-black"
+  %>
+  <%= f.password_field :password,
+    id: "password",
+    autofocus: params[:email].present? ? true : false,
+    placeholder: t('app.auth.password'),
+    class: "border border-gray-400 rounded p-3 dark:text-black"
+  %>
+  <%= f.submit t('app.auth.login'),
+    class: %|
+      text-white font-medium
+      bg-brand-blue dark:bg-gray-900
+      border border-white dark:border-gray-400
+      rounded-lg p-4 text-center
+      cursor-pointer
+      hover:opacity-95
+    |,
+    data: { turbo_submits_with: t('app.auth.authenticating') }
+  %>
+<% end %>

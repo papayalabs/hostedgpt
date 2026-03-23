@@ -17,7 +17,7 @@ module Agent
 
     def update
       if @conversation.update(conversation_params)
-        redirect_to @conversation, status: :see_other
+        redirect_to conversation_path(@conversation), status: :see_other
       else
         render :edit, status: :unprocessable_content
       end
