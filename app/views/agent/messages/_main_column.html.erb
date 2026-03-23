@@ -62,7 +62,7 @@
 
   <!-- Only one of these headers is visible at a time, depending on width -->
   <header id="wide-header" class="justify-between flex-none hidden h-10 mt-2 mb-3 ml-2 text-lg text-gray-950 dark:text-gray-100 md:flex">
-    <%= render 'messages/main_column/assistant_header' %>
+    <%= render 'agent/messages/main_column/assistant_header' %>
 
     <div class="flex items-center gap-2">
       <%= button_tag type: "button",
@@ -101,7 +101,7 @@
   <%= icon "bars-3", variant: :outline, size: 22, class: 'stroke-2 text-gray-950 dark:text-gray-100', title: t('app.conversations.ui.menu'), tooltip: :right %>
       <% end %>
 
-      <%= render 'messages/main_column/assistant_header' %>
+      <%= render 'agent/messages/main_column/assistant_header' %>
 
       <div class="flex items-center gap-2">
         <%= button_tag type: "button",
@@ -561,5 +561,5 @@
 <%= render "layouts/visualizer_overlay" %>
 
 <% if @conversation&.persisted? %>
-  <%= render "conversations/share_modal", conversation: @conversation %>
+  <%= render "agent/conversations/share_modal", conversation: @conversation %>
 <% end %>
