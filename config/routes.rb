@@ -10,17 +10,17 @@ Rails.application.routes.draw do
       resources :messages, only: [:index]
     end
     resources :messages, only: [:show, :update]
-    
+
     get "/login", to: "authentications#new"
     post "/login", to: "authentications#create"
     get "/register", to: "users#new"
     get "/logout", to: "authentications#destroy"
-    
+
     get "share/:share_token", to: "conversations#public_show", as: :public_conversation
   end
 
   namespace :settings do
-    scope module: 'agent/settings' do
+    scope module: "agent/settings" do
       resources :assistants, except: [:index, :show]
       resource :user, only: [:edit, :update]
       resources :memories, only: [:index, :destroy] do
