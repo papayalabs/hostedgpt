@@ -1,0 +1,27 @@
+module Agent
+  module Settings
+    class MemoriesController < Agent::Settings::ApplicationController
+      before_action :set_memory, only: :destroy
+
+      def index
+        @memories = Agent::Current.user.memories.includes(:message)
+      end
+
+      def destroy
+        @memory.destroy!
+        redirect_to settings_memories_url, notice: I18n.t("app.flashes.memories.forgotten"), status: :see_other
+      end
+
+      def destroy_all
+        Agent::Current.user.memories.delete_all
+        redirect_to settings_memories_url, notice: I18n.t("app.flashes.memories.cleared"), status: :see_other
+      end
+
+      private
+
+      def set_memory
+        @memory = Agent::Current.user.memories.find_by(id: params[:id])
+      end
+    end
+  end
+end

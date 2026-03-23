@@ -1,0 +1,53 @@
+module Agent
+  class DocumentsController < Agent::ApplicationController
+    require_unauthenticated_access
+    before_action :set_document, only: [:show, :edit, :update, :destroy]
+
+    def index
+      @documents = Agent::Document.all
+    end
+
+    def show
+    end
+
+    def new
+      @document = Agent::Document.new
+    end
+
+    def edit
+    end
+
+    def create
+      @document = Agent::Document.new(document_params)
+
+      if @document.save
+        redirect_to @document, notice: I18n.t("app.flashes.documents.created"), status: :see_other
+      else
+        render :new, status: :unprocessable_content
+      end
+    end
+
+    def update
+      if @document.update(document_params)
+        redirect_to @document, notice: I18n.t("app.flashes.documents.updated"), status: :see_other
+      else
+        render :edit, status: :unprocessable_content
+      end
+    end
+
+    def destroy
+      @document.destroy!
+      redirect_to documents_url, notice: I18n.t("app.flashes.documents.destroyed"), status: :see_other
+    end
+
+    private
+
+    def set_document
+      @document = Agent::Document.find(params[:id])
+    end
+
+    def document_params
+      params.require(:agent_document).permit(:user_id, :assistant_id, :message_id, :filename, :purpose, :bytes)
+    end
+  end
+end

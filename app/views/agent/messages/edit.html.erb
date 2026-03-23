@@ -4,6 +4,8 @@
   <turbo-frame id="message-text-<%= @message.id %>">
     <%= form_with(
       model: [@assistant, @new_message],
+      url: assistant_message_path(@assistant, @new_message),
+      method: :patch,
       class: "content-text",
       data: {
         turbo_frame: "_top",

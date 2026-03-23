@@ -219,6 +219,8 @@
         <% if @streaming_message %>
           <%= form_with(
             model: @streaming_message,
+            url: message_path(@streaming_message),
+            method: :patch,
             class: %|
               z-20
               absolute
