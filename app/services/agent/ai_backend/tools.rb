@@ -1,5 +1,5 @@
 module Agent
-  module AIBackend::Tools
+  module Agent::AIBackend::Tools
     extend ActiveSupport::Concern
 
     class_methods do

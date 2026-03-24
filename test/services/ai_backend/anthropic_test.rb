@@ -1,12 +1,12 @@
 require "test_helper"
 
-class AIBackend::AnthropicTest < ActiveSupport::TestCase
+class Agent::AIBackend::AnthropicTest < ActiveSupport::TestCase
   include ActionDispatch::TestProcess::FixtureFile
   setup do
     @conversation = conversations(:hello_claude)
     @assistant = assistants(:keith_claude35)
     @assistant.update!(supports_tools: false) # this will change the TestClient response so we want to be selective about this
-    @anthropic = AIBackend::Anthropic.new(
+    @anthropic = Agent::AIBackend::Anthropic.new(
       users(:keith),
       @assistant,
       @conversation,
@@ -236,7 +236,7 @@ class AIBackend::AnthropicTest < ActiveSupport::TestCase
   test "preceding_conversation_messages converts tool role to user with tool_result" do
     conversation = conversations(:weather)
     message = messages(:weather_explained)
-    @anthropic = AIBackend::Anthropic.new(users(:keith), message.assistant, conversation, message)
+    @anthropic = Agent::AIBackend::Anthropic.new(users(:keith), message.assistant, conversation, message)
 
     messages = @anthropic.send(:preceding_conversation_messages)
 
@@ -251,7 +251,7 @@ class AIBackend::AnthropicTest < ActiveSupport::TestCase
   test "preceding_conversation_messages converts assistant message with tool_calls" do
     conversation = conversations(:weather)
     message = messages(:weather_explained)
-    @anthropic = AIBackend::Anthropic.new(users(:keith), message.assistant, conversation, message)
+    @anthropic = Agent::AIBackend::Anthropic.new(users(:keith), message.assistant, conversation, message)
 
     messages = @anthropic.send(:preceding_conversation_messages)
 
@@ -351,7 +351,7 @@ class AIBackend::AnthropicTest < ActiveSupport::TestCase
       assistant: assistant
     )
 
-    anthropic = AIBackend::Anthropic.new(users(:keith), assistant, conversation, second_message)
+    anthropic = Agent::AIBackend::Anthropic.new(users(:keith), assistant, conversation, second_message)
     messages = anthropic.send(:preceding_conversation_messages)
 
 
@@ -412,7 +412,7 @@ class AIBackend::AnthropicTest < ActiveSupport::TestCase
       assistant: assistant
     )
 
-    anthropic = AIBackend::Anthropic.new(users(:keith), assistant, conversation, second_message)
+    anthropic = Agent::AIBackend::Anthropic.new(users(:keith), assistant, conversation, second_message)
     messages = anthropic.send(:preceding_conversation_messages)
 
     # Find the message with PDF content

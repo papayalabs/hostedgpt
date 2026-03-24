@@ -1,5 +1,5 @@
 module Agent
-  module AIBackend::Utilities
+  module Agent::AIBackend::Utilities
     extend ActiveSupport::Concern
 
     included do

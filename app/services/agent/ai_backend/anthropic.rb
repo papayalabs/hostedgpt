@@ -170,7 +170,7 @@ module Agent
       rescue ::Faraday::UnauthorizedError => e
         raise ::Anthropic::ConfigurationError
       rescue => e
-        Rails.logger.info "\nUnhandled error in Agent::AIBackend::Anthropic response handler: #{e.message}"
+        Rails.logger.info "\nUnhandled error in Agent::Agent::AIBackend::Anthropic response handler: #{e.message}"
       end
     end
 

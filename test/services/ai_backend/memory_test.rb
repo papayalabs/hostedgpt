@@ -1,6 +1,6 @@
 require "test_helper"
 
-class AIBackend::MemoryTest < ActiveSupport::TestCase
+class Agent::AIBackend::MemoryTest < ActiveSupport::TestCase
   setup do
     @asst_instructions = assistants(:samantha).instructions
   end

@@ -1,11 +1,11 @@
 require "test_helper"
 
-class AIBackend::OpenAI::ToolsTest < ActiveSupport::TestCase
+class Agent::AIBackend::OpenAI::ToolsTest < ActiveSupport::TestCase
   setup do
     @conversation = conversations(:attachments)
     @assistant = assistants(:keith_gpt4)
     @assistant.update!(supports_tools: false) # this will change the TestClient response so we want to be selective about this
-    @openai = AIBackend::OpenAI.new(
+    @openai = Agent::AIBackend::OpenAI.new(
       users(:keith),
       @assistant,
       @conversation,

@@ -1,6 +1,6 @@
 require "test_helper"
 
-class AIBackend::ToolsTest < ActiveSupport::TestCase
+class Agent::AIBackend::ToolsTest < ActiveSupport::TestCase
   test "get_tool_messages_by_calling properly executes tools" do
     tool_message = {
       role: "tool",
@@ -16,7 +16,7 @@ class AIBackend::ToolsTest < ActiveSupport::TestCase
     tool_calls[0][:function][:name] = "helloworld_bad"
     tool_calls[0][:function][:arguments].delete(:name)
 
-    msg = AIBackend::OpenAI.get_tool_messages_by_calling(tool_calls).first
+    msg = Agent::AIBackend::OpenAI.get_tool_messages_by_calling(tool_calls).first
     assert_equal "tool", msg[:role]
     assert_equal "abc123", msg[:tool_call_id]
     assert_equal messages(:weather_tool_call).content_tool_calls.first, msg[:content_tool_calls]
@@ -28,7 +28,7 @@ class AIBackend::ToolsTest < ActiveSupport::TestCase
     tool_calls[0][:function][:name] = "helloworld_nonexistent"
     tool_calls[0][:function][:arguments].delete(:name)
 
-    msg = AIBackend::OpenAI.get_tool_messages_by_calling(tool_calls).first
+    msg = Agent::AIBackend::OpenAI.get_tool_messages_by_calling(tool_calls).first
     assert_equal "tool", msg[:role]
     assert_equal "abc123", msg[:tool_call_id]
     assert_equal messages(:weather_tool_call).content_tool_calls.first, msg[:content_tool_calls]

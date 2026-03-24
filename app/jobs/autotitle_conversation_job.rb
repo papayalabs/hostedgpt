@@ -24,8 +24,8 @@ class AutotitleConversationJob < ApplicationJob
 
     ai_backend = @conversation.assistant.ai_backend.new(@conversation.user, @conversation.assistant)
 
-    if ai_backend.class == AIBackend::OpenAI || ai_backend.class == AIBackend::Anthropic
-      params = ai_backend.class == AIBackend::OpenAI ? { response_format: { type: "json_object" } } : {}
+    if ai_backend.class == Agent::AIBackend::OpenAI || ai_backend.class == Agent::AIBackend::Anthropic
+      params = ai_backend.class == Agent::AIBackend::OpenAI ? { response_format: { type: "json_object" } } : {}
 
       response = ai_backend.get_oneoff_message(
         system_message,
@@ -33,7 +33,7 @@ class AutotitleConversationJob < ApplicationJob
         params
       )
       return JSON.parse(response)["topic"]
-    elsif ai_backend.class == AIBackend::Gemini
+    elsif ai_backend.class == Agent::AIBackend::Gemini
       response = ai_backend.get_oneoff_message(
         system_message,
         [text],

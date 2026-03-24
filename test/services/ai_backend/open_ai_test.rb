@@ -1,11 +1,11 @@
 require "test_helper"
 
-class AIBackend::OpenAITest < ActiveSupport::TestCase
+class Agent::AIBackend::OpenAITest < ActiveSupport::TestCase
   setup do
     @conversation = conversations(:attachments)
     @assistant = assistants(:keith_gpt4)
     @assistant.update!(supports_tools: false) # this will change the TestClient response so we want to be selective about this
-    @openai = AIBackend::OpenAI.new(
+    @openai = Agent::AIBackend::OpenAI.new(
       users(:keith),
       @assistant,
       @conversation,
@@ -58,7 +58,7 @@ class AIBackend::OpenAITest < ActiveSupport::TestCase
       tool_call_id: "abc123",
       content_tool_calls: messages(:weather_tool_call).content_tool_calls.first,
     }
-    assert_equal [tool_message], AIBackend::OpenAI.get_tool_messages_by_calling(messages(:weather_tool_call).content_tool_calls)
+    assert_equal [tool_message], Agent::AIBackend::OpenAI.get_tool_messages_by_calling(messages(:weather_tool_call).content_tool_calls)
   end
 
   test "tools only passed when supported by the language model" do
@@ -86,7 +86,7 @@ class AIBackend::OpenAITest < ActiveSupport::TestCase
     tool_calls[0][:function][:name] = "helloworld_bad"
     tool_calls[0][:function][:arguments].delete(:name)
 
-    msg = AIBackend::OpenAI.get_tool_messages_by_calling(tool_calls).first
+    msg = Agent::AIBackend::OpenAI.get_tool_messages_by_calling(tool_calls).first
     assert_equal "tool", msg[:role]
     assert_equal "abc123", msg[:tool_call_id]
     assert msg[:content].starts_with?('"An unexpected error occurred')
@@ -97,7 +97,7 @@ class AIBackend::OpenAITest < ActiveSupport::TestCase
     tool_calls[0][:function][:name] = "helloworld_nonexistent"
     tool_calls[0][:function][:arguments].delete(:name)
 
-    msg = AIBackend::OpenAI.get_tool_messages_by_calling(tool_calls).first
+    msg = Agent::AIBackend::OpenAI.get_tool_messages_by_calling(tool_calls).first
     assert_equal "tool", msg[:role]
     assert_equal "abc123", msg[:tool_call_id]
     assert msg[:content].starts_with?('"An unexpected error occurred')
@@ -170,7 +170,7 @@ class AIBackend::OpenAITest < ActiveSupport::TestCase
     assistant = message.assistant
     user = message.user
     version = message.version
-    @openai = AIBackend::OpenAI.new(user, assistant, conversation, message)
+    @openai = Agent::AIBackend::OpenAI.new(user, assistant, conversation, message)
 
     preceding_conversation_messages = @openai.send(:preceding_conversation_messages)
     convo_messages = conversation.messages.for_conversation_version(version).where("messages.index < ?", message.index)
@@ -186,7 +186,7 @@ class AIBackend::OpenAITest < ActiveSupport::TestCase
     assistant = message.assistant
     user = message.user
     version = message.version
-    @openai = AIBackend::OpenAI.new(user, assistant, conversation, message)
+    @openai = Agent::AIBackend::OpenAI.new(user, assistant, conversation, message)
 
     messages = @openai.send(:preceding_conversation_messages)
 

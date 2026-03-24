@@ -104,7 +104,7 @@ module Agent
       rescue ::Faraday::UnauthorizedError => e
         raise OpenAI::ConfigurationError
       rescue => e
-        Rails.logger.info "\nUnhandled error in Agent::AIBackend::OpenAI response handler: #{e.message}"
+        Rails.logger.info "\nUnhandled error in Agent::Agent::AIBackend::OpenAI response handler: #{e.message}"
         Rails.logger.info e.backtrace.join("\n")
       end
     end

@@ -1,12 +1,12 @@
 require "test_helper"
 
-class AIBackend::GeminiTest < ActiveSupport::TestCase
+class Agent::AIBackend::GeminiTest < ActiveSupport::TestCase
   include ActionDispatch::TestProcess::FixtureFile
   setup do
     @conversation = conversations(:hello_claude)
     @assistant = assistants(:keith_claude35)
     @assistant.update!(supports_tools: false)
-    @gemini = AIBackend::Gemini.new(
+    @gemini = Agent::AIBackend::Gemini.new(
       users(:keith),
       @assistant,
       @conversation,
@@ -58,7 +58,7 @@ class AIBackend::GeminiTest < ActiveSupport::TestCase
       assistant: assistant
     )
 
-    gemini = AIBackend::Gemini.new(users(:keith), assistant, conversation, second_message)
+    gemini = Agent::AIBackend::Gemini.new(users(:keith), assistant, conversation, second_message)
     messages = gemini.send(:preceding_conversation_messages)
 
 
@@ -119,7 +119,7 @@ class AIBackend::GeminiTest < ActiveSupport::TestCase
       assistant: assistant
     )
 
-    gemini = AIBackend::Gemini.new(users(:keith), assistant, conversation, second_message)
+    gemini = Agent::AIBackend::Gemini.new(users(:keith), assistant, conversation, second_message)
     messages = gemini.send(:preceding_conversation_messages)
 
     # Find the message with PDF content

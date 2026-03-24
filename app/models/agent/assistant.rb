@@ -31,9 +31,9 @@ module Agent
 
     def ai_backend
       case driver
-      when "openai"    then AIBackend::OpenAI
-      when "anthropic" then AIBackend::Anthropic
-      when "gemini"    then AIBackend::Gemini
+      when "openai"    then Agent::AIBackend::OpenAI
+      when "anthropic" then Agent::AIBackend::Anthropic
+      when "gemini"    then Agent::AIBackend::Gemini
       end
     end
 

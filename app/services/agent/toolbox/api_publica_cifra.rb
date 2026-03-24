@@ -1,4 +1,5 @@
-  class Agent::Toolbox::APIPublicaCifra < Toolbox
+module Agent
+  class Toolbox::APIPublicaCifra < Toolbox
   # Toolbox para acceder a la API Pública de Cifra.
   # Documentación: ver ACCESO_API_PUBLICA.md
   #
@@ -317,4 +318,5 @@
     def calcular_firma(token_s)
       OpenSSL::HMAC.hexdigest("sha256", secret_key, token_s)
     end
+  end
 end

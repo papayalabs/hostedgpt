@@ -15,7 +15,7 @@ HostedGPT is a Ruby on Rails 7.2 application providing a multi‑provider conver
 - Rails MVC + Hotwire (Turbo + Stimulus), Tailwind for styling.
 - Background job queue: SolidQueue (runs in Puma with `RUN_SOLID_QUEUE_IN_PUMA=true`).
 - Streaming tokens: ActionCable (PostgreSQL enhanced adapter).
-- AI abstraction: `AIBackend::<Provider>` classes in `app/services/ai_backend/` selected via `APIService#driver`.
+- AI abstraction: `Agent::AIBackend::<Provider>` classes in `app/services/ai_backend/` selected via `APIService#driver`.
 - Dynamic model & assistant provisioning: YAML seeds (`models.yml`, `assistants.yml`) imported per user on registration (`User::Registerable`).
 - Feature flags & settings: `config/options.yml` accessed through `Feature.*` / `Setting.*` helpers.
 - Message flow: `MessagesController` creates user messages; async job fetches assistant reply; streaming handled in backend-specific service.
@@ -37,7 +37,7 @@ OpenAI, Anthropic, Groq (OpenAI-compatible), Google Gemini. Provider selection l
 
 ## Adding a New AI Provider (Guideline)
 1. Add enum value to `APIService.driver` and constants for base URL.
-2. Implement `AIBackend::<NewProvider>` (model naming & streaming semantics similar to existing backends). Reuse shared utility methods in base `AIBackend` class.
+2. Implement `Agent::AIBackend::<NewProvider>` (model naming & streaming semantics similar to existing backends). Reuse shared utility methods in base `AIBackend` class.
 3. Handle test client stub for deterministic tests.
 4. Extend seeding (user registration hook) if you want automatic creation.
 5. Update `models.yml` with default models (capabilities: images, tools, costs, system message support).
