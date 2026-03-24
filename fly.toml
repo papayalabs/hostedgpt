@@ -14,11 +14,9 @@ console_command = '/rails/bin/rails console'
 [deploy]
   release_command = './bin/rails db:prepare'
 
-[env]
-  RUN_SOLID_QUEUE_IN_PUMA = 'true'
-
 [processes]
   app = './bin/rails server'
+  worker = 'bundle exec sidekiq'
 
 [http_service]
   internal_port = 3000

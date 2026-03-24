@@ -43,7 +43,7 @@ gem "ruby-openai", "~> 7.0.1"
 gem "ruby-anthropic", "~> 0.4.0"
 gem "gemini-ai", "~> 4.2.0"
 gem "tiktoken_ruby", "~> 0.0.9"
-gem "solid_queue", "~> 1.0.0"
+gem "sidekiq", "~> 7.1"
 gem "name_of_person"
 gem "actioncable-enhanced-postgresql-adapter" # longer paylaods w/ postgresql actioncable
 gem "aws-sdk-s3", require: false

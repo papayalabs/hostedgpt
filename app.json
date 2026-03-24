@@ -40,9 +40,9 @@
       "description": "hostedgpt specific",
       "generator": "secret"
     },
-    "RUN_SOLID_QUEUE_IN_PUMA": {
-      "description": "Runs the worker process within web dynos",
-      "value": "true"
+    "SIDEKIQ_CONCURRENCY": {
+      "description": "Number of simultaneous job executions (default: 5)",
+      "value": "5"
     }
   },
   "formation": {

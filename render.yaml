@@ -32,7 +32,18 @@ services:
           name: hostedgpt-postgres
           property: connectionString
       - fromGroup: hostedgpt-secrets
-      - key: RUN_SOLID_QUEUE_IN_PUMA
-        value: true
       - key: WEB_CONCURRENCY
         value: 2 # sensible default
+  - type: worker
+    name: hostedgpt-worker
+    runtime: docker
+    plan: free
+    startCommand: bundle exec sidekiq
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: hostedgpt-postgres
+          property: connectionString
+      - fromGroup: hostedgpt-secrets
+      - key: SIDEKIQ_CONCURRENCY
+        value: 5

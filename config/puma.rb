@@ -47,7 +47,3 @@ plugin :tmp_restart
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
 # In other environments, only set the PID file if requested.
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
-
-if ENV.fetch("RUN_SOLID_QUEUE_IN_PUMA") { false } # This is intended for cheap production hosts.
-  plugin :solid_queue                             # In development we always run bin/dev which
-end                                               # uses the Procfile to start solid_queue.

@@ -129,7 +129,13 @@ psql postgres://app:secret@postgres/hostedgpt_production
 Take this DB connection string and start your rails server like this:
 
 ```
-RAILS_ENV=production RUN_SOLID_QUEUE_IN_PUMA=true DATABASE_URL=postgres://string-you-verified-above rails s -p 8081
+RAILS_ENV=production DATABASE_URL=postgres://string-you-verified-above bin/rails s -p 8081
+```
+
+In production, also run a Sidekiq worker process:
+
+```
+RAILS_ENV=production DATABASE_URL=postgres://string-you-verified-above bundle exec sidekiq
 ```
 
 **Note:** You can change the port 8081 to anything you want.
