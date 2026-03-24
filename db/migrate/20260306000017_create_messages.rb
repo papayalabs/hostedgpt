@@ -1,5 +1,3 @@
-# messages.content_document_id references documents — foreign key added later
-# in 20260306000035_add_circular_foreign_keys.rb to avoid circular dependency.
 class CreateMessages < ActiveRecord::Migration[8.0]
   def change
     create_table "messages" do |t|
@@ -47,5 +45,14 @@ class CreateMessages < ActiveRecord::Migration[8.0]
     add_foreign_key "messages", "assistants"
     add_foreign_key "messages", "conversations"
     add_foreign_key "messages", "runs"
+    add_foreign_key "messages", "documents",
+                    column: "content_document_id"
+
+    # Circular FK dependencies resolved here
+    add_foreign_key "users", "messages",
+                    column: "last_cancelled_message_id"
+    add_foreign_key "conversations", "messages",
+                    column: "last_assistant_message_id"
+    add_foreign_key "documents", "messages"
   end
 end
