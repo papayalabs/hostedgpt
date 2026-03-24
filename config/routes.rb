@@ -17,10 +17,7 @@ Rails.application.routes.draw do
     get "/logout", to: "authentications#destroy"
 
     get "share/:share_token", to: "conversations#public_show", as: :public_conversation
-  end
-
-  namespace :settings do
-    scope module: "agent/settings" do
+    scope path: "settings", module: "settings", as: "settings" do
       resources :assistants, except: [:index, :show]
       resource :user, only: [:edit, :update]
       resources :memories, only: [:index, :destroy] do
