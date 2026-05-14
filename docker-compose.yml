@@ -65,9 +65,21 @@ services:
       - EMAIL_FROM
       - EMAIL_HOST
       - POSTMARK_SERVER_API_TOKEN
-    ports: ["3000:3000"]
     volumes:
       - .:/rails
+
+  web:
+    <<: *base
+    container_name: hostedgpt_web
+    ports: ["4000:3000"]
+    command: bundle exec rails server -b 0.0.0.0
+
+  sidekiq:
+    <<: *base
+    container_name: hostedgpt_sidekiq
+    depends_on: ["postgres", "web"]
+    ports: []
+    command: bundle exec sidekiq
 
 volumes:
   hostedgpt_pgdata:
