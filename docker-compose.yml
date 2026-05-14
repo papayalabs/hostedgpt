@@ -15,9 +15,19 @@ services:
       interval: 1s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: hostedgpt_redis
+    restart: always
+    ports: ["6379:6379"]
+    healthcheck:
+      test: redis-cli ping
+      interval: 1s
+      retries: 5
+
   base: &base
     container_name: hostedgpt
-    depends_on: ["postgres"]
+    depends_on: ["postgres", "redis"]
     restart: on-failure:3
     tty: true
     build:
@@ -31,6 +41,7 @@ services:
       - HOSTED_DB_PORT=${HOSTED_DB_PORT:-5432}
       - HOSTED_DB_NAME=${HOSTED_DB_NAME:-app}
       # NOTE: Using DATABASE_URL to configure db is NOT supported by this Docker compose
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
       - APP_URL_PROTOCOL
       - APP_URL_HOST
       - APP_URL_PORT
@@ -78,7 +89,7 @@ services:
   sidekiq:
     <<: *base
     container_name: hostedgpt_sidekiq
-    depends_on: ["postgres", "web"]
+    depends_on: ["postgres", "redis", "web"]
     ports: []
     command: bundle exec sidekiq
 
