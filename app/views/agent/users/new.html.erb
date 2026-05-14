@@ -1,0 +1,62 @@
+<% content_for :heading, "Create your account" %>
+<% if @user.errors.any? %>
+  <div id="error_explanation" class="px-3 py-2 mt-3 font-medium text-red-500 rounded-lg bg-red-50">
+    <ul>
+      <% @user.errors.full_messages.each do |error| %>
+        <li><%= error.capitalize %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: @user, url: users_path, method: :post, class: "flex flex-col space-y-4 w-80" do |f| %>
+  <%= f.label :email, class: "input input-bordered flex items-center justify-between" do %>
+    <span>Email <span class="">*</span></span>
+    <%= f.email_field :email,
+      autofocus: true,
+      placeholder: "Email",
+      class: "w-44 border-0 dark:text-black"
+    %>
+  <% end %>
+
+  <%= f.label :password, class: "input input-bordered flex items-center justify-between" do %>
+    <span>Password <span class="">*</span></span>
+    <%= f.password_field :password,
+      placeholder: "Password",
+      class: "w-44 border-0 dark:text-black"
+    %>
+  <% end %>
+
+  <%= f.label :first_name, class: "input input-bordered flex items-center justify-between" do %>
+    <span>First Name <span class="">*</span></span>
+    <%= f.text_field :first_name,
+      placeholder: "First name",
+      class: "w-44 border-0 dark:text-black"
+    %>
+  <% end %>
+
+  <%= f.label :last_name, class: "input input-bordered flex items-center justify-between" do %>
+    <span>Last Name</span>
+    <%= f.text_field :last_name,
+      placeholder: "Last name",
+      class: "w-44 border-0 dark:text-black"
+    %>
+  <% end %>
+
+  <%= f.submit "Sign Up",
+    class: %|
+      text-white font-medium
+      bg-brand-blue dark:bg-gray-900
+      border border-white dark:border-gray-400
+      rounded-lg p-4 text-center
+      cursor-pointer
+      hover:opacity-95
+    |,
+    data: { turbo_submits_with: "Creating..." }
+  %>
+<% end %>
+
+<span class="text-sm text-center">
+  Already have an account?
+  <%= link_to "Log in", login_path, class: "underline" %>
+</span>

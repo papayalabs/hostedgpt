@@ -65,13 +65,14 @@ services:
       - EMAIL_FROM
       - EMAIL_HOST
       - POSTMARK_SERVER_API_TOKEN
+      - USING_PROCFILE=true
     volumes:
       - .:/rails
 
   web:
     <<: *base
     container_name: hostedgpt_web
-    ports: ["4000:3000"]
+    ports: ["9838:3000"]
     command: bundle exec rails server -b 0.0.0.0
 
   sidekiq:
